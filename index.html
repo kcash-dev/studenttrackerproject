@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet"> 
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="/styles2.css">
+    
+    <script src="https://kit.fontawesome.com/9c8fd68b30.js" crossorigin="anonymous"></script>
+
+    <!-- FAB -->
+    <link rel="stylesheet" href="css/button.css">
+    <link rel="stylesheet" href="/css/floating-action-button.css">
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-storage.js"></script>
+    
+    <title>Student Tracker</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <nav class="navbar bg-info">
+        <a class="navbar-brand">
+          <img src="images/logo.png" alt="Logo" width="30%">
+        </a>
+      </nav>
+      <div class="row">
+        <div class="menu pmd-floating-action" id="new-buttons"  role="navigation">
+          <a href="javascript:void(0);" class="pmd-floating-action-btn btn btn-sm pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-success" id="upload-image-button" data-title="Upload Student Photo/Video"> 
+            <span class="pmd-floating-hidden">Upload Student Photo/Video</span>
+            <i class="fas fa-portrait"></i>
+          </a> 
+          <a href="javascript:void(0);" class="pmd-floating-action-btn btn btn-sm pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-danger" id="delete-student-button" data-title="Delete Student"> 
+            <span class="pmd-floating-hidden">Delete Student</span> 
+            <i class="fas fa-user-slash"></i>
+          </a> 
+          <a href="javascript:void(0);" class="pmd-floating-action-btn btn btn-sm pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-warning" id="add-student-button" data-title="Add Student"> 
+            <span class="pmd-floating-hidden">Add Student</span> 
+            <i class="fas fa-user-graduate"></i>
+          </a> 
+          <a class="pmd-floating-action-btn btn pmd-btn-fab pmd-btn-raised pmd-ripple-effect btn-info" id="add-class-button" data-title="Add Class" href="javascript:void(0);"> 
+            <span class="pmd-floating-hidden">Add Class</span>
+            <i class="fas fa-chalkboard-teacher"></i>
+          </a> 
+        </div>
+
+        <!--Upload Student Photo Form-->
+        <div class="col-md-4 col-sm-4 add-student-photo text-center d-none">
+          <h2>Upload Student Profile Photo</h2>
+          <form id="add-student-photo-form">
+            <div class="mb-3">
+              <label for="student-photo-select">Student Name</label>
+              <select class="form-select" id="student-photo-select" aria-label="Select Student">
+                <option selected>Student menu</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <p><label for="photo">Upload Image</label></p>
+              <p><input type="file" accept="image/*" name="fileupload" value="fileupload" id="photo"></p>
+              <button class="btn btn-secondary" id="upload-button" onclick="uploadImage()">Upload</button>
+            </div>
+            <div class="mb-3">
+              <p><label for="video">Upload Video</label></p>
+              <p><input type="text" accept="text" name="videoupload" value="videoupload" id="video"></p>
+              <button class="btn btn-secondary" id="video-upload-button">Upload</button>
+            </div>
+          </form>
+        </div>
+
+        <!--Add New Class Form-->
+        <div class="col-md-4 col-sm-4 add-new-class text-center d-none">
+          <h2>Add New Class</h2>
+          <form id="add-new-class-form">
+            <div class="mb-3">
+              <label for="student-select">Student Name</label>
+              <select class="form-select" id="student-select" aria-label="Select Student">
+                <option selected>Student menu</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="class-date" class="form-label">Date</label>
+              <input type="date" class="form-control" id="class-date">
+            </div>
+            <div class="mb-3">
+              <label for="class-notes" class="form-label">Class Notes</label>
+              <textarea class="form-control" id="class-notes" rows="3"></textarea>
+            </div>
+            <button type="button" id="add-new-class-button" class="btn btn-info"><i class="fas fa-plus"></i></button>
+          </form>
+        </div>
+
+        <!--Add New Student Form-->
+        <div class="col-md-4 col-sm-4 add-new-student text-center d-none">
+          <h2>Add New Student</h2>
+          <form id="add-new-student-form">
+            <div class="mb-3">
+              <label for="new-student-name" class="form-label">Student Name</label>
+              <input type="text" class="form-control" name="name" id="new-student-name">
+            </div>
+            <div class="mb-3">
+              <label for="new-student-birthday" class="form-label">Student Birthday</label>
+              <input type="date" class="form-control" name="birthday" id="new-student-birthday">
+            </div>
+            <div class="mb-3">
+              <label for="new-student-nationality" class="form-label">Student Nationality</label>
+              <input type="text" class="form-control" name="nationality" id="new-student-nationality">
+            </div>
+            <div class="mb-3">
+              <label for="length-select">Class Length</label>
+              <select class="form-select" id="length-select" name="classLength" aria-label="Select class length">
+                <option selected>Select class length</option>
+                <option value="15">15 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="45">45 minutes</option>
+                <option value="60">1 hour</option>
+              </select>
+            </div>
+            <div class="mb-3">
+                <label for="new-student-notes" class="form-label">Student Notes</label>
+                <textarea class="form-control" id="new-student-notes" name="newStudentNotes" rows="3"></textarea>
+            </div>
+            <button id="add-new-student-button" class="btn btn-warning"><i class="fas fa-plus"></i></button>
+          </form>
+        </div>
+
+        <!--Delete Student Form-->
+        <div class="col-md-4 col-sm-4 delete-student text-center d-none">
+          <h2>Delete Student</h2>
+          <form id="delete-student-form">
+            <div class="mb-3">
+              <label for="student-delete-select">Select Student</label>
+              <select class="form-select" id="student-delete-select" name="studentDelete" aria-label="Select student to delete">
+                <option selected>Select student</option>
+              </select>
+            </div>
+            <button id="delete-student-form-button" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+          </form>
+        </div>
+
+        <!--Student Tabs-->
+        <div class="col-md-8 col-sm-8 student-tabs">
+          <div class="col-md-12 col-sm-12">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <option value="example" data-id="example" class="d-none">Example</option>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade row d-none" id="example-student" role="tabpanel" aria-labelledby="example-student-tab">
+                <div class="col-md-12 col-sm-12 row">
+                  <div class="student-info col-md-6 col-sm-6">
+                    Name:Example Student<br>
+                    Birthday: 01/01/2010<br>
+                    Nationality: Martian<br>
+                    Number of Classes: 0 classes<br>
+                    Class Length: 45 minutes<br>
+                    <div>
+                        <button class="btn btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentNotes" id="student-notes-collapse-button" aria-expanded="false" aria-controls="collapseStudentNotes">
+                            <i class="far fa-clipboard"></i>
+                        </button>
+                        <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentVideo" id="student-video-collapse-button" aria-expanded="false" aria-controls="collapseStudentVideo">
+                          <i class="fab fa-youtube"></i>
+                        </button>
+                    </div>
+                    <div class="collapse" id="collapseStudentNotes">
+                        <div class="card card-body">
+                            <p>Example Student Notes</p>
+                        </div>
+                    </div>
+                    <div class="collapse" id="collapseStudentVideo">
+                      <div class="card card-body student-video-body">
+                          <h4 class="text-success">Previous Class Video Replay</h4>
+                          Student Video
+                          <form id="add-new-video-form">
+                            <div class="mb-3">
+                                <label for="new-example-student-video-html" class="form-label">Student Video iFrame Link</label>
+                                <input data-id="$exampleID" type="text" class="form-control" name="name" id="new-example-student-video-html" placeholder="<iframe>...</iframe>">
+                            </div>
+                            <button type="button" id="add-student-video-url-button" class="btn btn-warning"><i class="fas fa-plus"></i></button>
+                          </form>
+                      </div>
+                    </div>
+                  </div>
+                    <div class="col-md-6 col-sm-6">
+                        <img id="student-photo" src="student-photo.png" width="100%" alt="Student Photo">
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                  <div class="card bg-danger payment-container">
+                      <div class="card-body">
+                          <h1 class="text-center">Payment</h1>
+                          <table class="table text-center">
+                              <thead>
+                              <tr>
+                                  <th scope="col">Total Classes</th>
+                                  <th scope="col">Rate</th>
+                                  <th scope="col">Total</th>
+                              </tr>
+                              </thead>
+                              <tbody>
+                              <tr>
+                                  <th scope="row">0</th>
+                                  <td>$26</td>
+                                  <td>$0</td>
+                              </tr>
+                              </tbody>
+                          </table>
+                          <button type="button" id="verify-payment-button" onclick="showPopup()" class="btn btn-warning">Verify Payment</button>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="popup-wrapper d-none">
+          <div class="popup">
+              <div class="popup-content">
+                  <div class="popup-card card" style="width: 18rem;">
+                      <div class="card-body">
+                          <h5 class="card-title">Verify Payment?</h5>
+                          <p class="card-text">Are you sure you would like to verify that this student has paid?</p>
+                          <button type="button" class="btn btn-success verify-button">Verify</button>
+                          <button type="button" class="btn btn-secondary cancel-button">Cancel</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      </div>
+    </div>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+     <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-analytics.js"></script>
+
+     <script>
+     // Your web app's Firebase configuration
+     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+     var firebaseConfig = {
+         apiKey: "AIzaSyD8g77Oa4XK93uj8p1-yi-y0Wbl2Hn71P0",
+         authDomain: "student-tracker-babab.firebaseapp.com",
+         projectId: "student-tracker-babab",
+         storageBucket: "student-tracker-babab.appspot.com",
+         messagingSenderId: "886497130279",
+         appId: "1:886497130279:web:84ede1ad54ffbb7f7d1b02",
+         measurementId: "G-F2K5KS1JQ9"
+     };
+     // Initialize Firebase
+     firebase.initializeApp(firebaseConfig);
+     firebase.analytics();
+     const db = firebase.firestore();
+     db.settings({ timestampsInSnapshots: true });
+     </script>
+    <script src="students.js"></script>
+    <script src="uploads.js"></script>
+    <script src="app.js"></script>
+    
+  </body>
+</html>
