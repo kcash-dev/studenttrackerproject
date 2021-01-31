@@ -6,6 +6,13 @@ body, html {
     height:100%;
 }
 
+.add-student-photo form, .add-new-class form, .add-new-student form, .delete-student form {
+  margin-left: 20px;
+}
+
+.add-student-photo h2, .add-new-class h2, .add-new-student h2, .delete-student h2 {
+  margin-top: 20px;
+}
 
 #add-new-class-button, #add-new-student-button, #student-notes-collapse-button, #delete-student-form-button, #student-video-collapse-button, 
 #add-student-video-url-button {
@@ -148,10 +155,20 @@ footer {
   margin-top: 20px;
 }
 
-.student-profile-photo {
+.student-profile {
   border-radius: 8px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   margin-top: 10px;
+  color: white;
+}
+
+.student-profile-buttons-all {
+  margin: 25px auto;
+  text-align: left;
+}
+
+.student-profile-button:nth-child(2) {
+  margin-left: 10px;
 }
 
 .student-profile-photo img {

@@ -31,12 +31,39 @@ let i = 1;
 function addStudentInfo(change) {
     // Populate Student info
     const j = new Student(change.doc.data().name, change.doc.data().birthday, change.doc.data().nationality, change.doc.data().numClasses, change.doc.data().classLength, change.doc.data().studentNotes, change.doc.data().studentPhotoURL, change.doc.data().studentVideoURL, change.doc.data().paidMonth);
-            
+    
+    // Date
+
+    var d = new Date();
+    var month = new Array();
+    month[0] = "January";
+    month[1] = "February";
+    month[2] = "March";
+    month[3] = "April";
+    month[4] = "May";
+    month[5] = "June";
+    month[6] = "July";
+    month[7] = "August";
+    month[8] = "September";
+    month[9] = "October";
+    month[10] = "November";
+    month[11] = "December";
+    var month = month[d.getMonth()];
+
+
     let rate = 26;
     let hours = (j.numClasses * j.classLength) / 60;
     let monthTotal = hours * rate;
     
     studentCollection.push(change.doc.data());
+
+    let studentPhoto;
+
+    if (j.studentPhotoURL == undefined) {
+        studentPhoto = `/student-photo.png`
+    } else {
+        studentPhoto = j.studentPhotoURL
+    }
 
     let newStudent = '';
     let studentInfo = '';
@@ -82,18 +109,18 @@ function addStudentInfo(change) {
     // Create student info on tab
     studentInfo = `
     <div data-id="${change.doc.id}" class="tab-pane fade row" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
-        <div class="col-md-12 col-sm-12 row">
+        <div class="col-md-12 col-sm-12 row student-profile bg-success">
             <div class="student-info col-md-6 col-sm-6">
-                Name: ${j.name}<br>
+                <h2>${j.name}</h2>
                 Birthday: ${j.birthday}<br>
                 Nationality: ${j.nationality}<br>
                 Number of Classes: ${j.numClasses} classes<br>
                 Class Length: ${j.classLength} minutes<br>
-                <div>
-                    <button class="btn btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentNotes" id="student-notes-collapse-button" aria-expanded="false" aria-controls="collapseStudentNotes">
+                <div class="student-profile-buttons-all">
+                    <button class="btn btn-warning student-profile-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentNotes" id="student-notes-collapse-button" aria-expanded="false" aria-controls="collapseStudentNotes">
                         <i class="far fa-clipboard"></i>
                     </button>
-                    <button class="btn btn-danger" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentVideo" id="student-video-collapse-button" aria-expanded="false" aria-controls="collapseStudentVideo">
+                    <button class="btn btn-danger student-profile-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentVideo" id="student-video-collapse-button" aria-expanded="false" aria-controls="collapseStudentVideo">
                         <i class="fab fa-youtube"></i>
                     </button>
                 </div>
@@ -110,14 +137,14 @@ function addStudentInfo(change) {
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-6 student-profile-photo bg-success">
-                <img id="${smallName}-photo" src="${j.studentPhotoURL}" width="100%" alt="Student Photo">
+            <div class="col-md-6 col-sm-6 student-profile-photo">
+                <img id="${smallName}-photo" src="${studentPhoto}" width="100%" alt="Student Photo">
             </div>
         </div>
         <div class="col-md-12 col-sm-12 payment-container">
             <div class="card ${paymentVerification} ${smallName}-payment-card" data-id="${change.doc.id}">
                 <div class="card-body text-center">
-                    <h1 class="text-center paymentH1">Payment</h1>
+                    <h1 class="text-center paymentH1">${month} Payment</h1>
                     <table class="table text-center">
                         <thead>
                         <tr>
