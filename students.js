@@ -9,6 +9,12 @@ const myTab = document.querySelector('#myTab');
 const myTabContent = document.querySelector('#myTabContent');
 const studentPhotoSelect = document.querySelector('#student-photo-select');
 const paymentCard = document.querySelectorAll('.payment-container');
+const bodyDiv = document.querySelector('.body-div');
+const tabPanes = document.querySelectorAll('.tab-panes');
+const newStudent = document.querySelector('.add-new-student');
+const newClass = document.querySelector('.add-new-class');
+const deleteStudent = document.querySelector('.delete-student');
+const uploadPhoto = document.querySelector('.add-student-photo');
 
 
 
@@ -29,8 +35,14 @@ let studentCollection = []
 let i = 1;
 
 function addStudentInfo(change) {
+    
     // Populate Student info
     const j = new Student(change.doc.data().name, change.doc.data().birthday, change.doc.data().nationality, change.doc.data().numClasses, change.doc.data().classLength, change.doc.data().studentNotes, change.doc.data().studentPhotoURL, change.doc.data().studentVideoURL, change.doc.data().paidMonth);
+    
+    
+    let smallName = j.name.toLowerCase();
+
+
     
     // Date
 
@@ -74,7 +86,7 @@ function addStudentInfo(change) {
     let photoUploadInfo = '';
     let deleteStudentSelect = '';
 
-    let smallName = j.name.toLowerCase();
+    
 
     // Populate Photo form with students
 
@@ -128,7 +140,7 @@ function addStudentInfo(change) {
                     </button>
                 </div>
                 <div class="collapse" id="collapseStudentNotes">
-                    <div class="card card-body">
+                    <div class="card card-body student-notes-card-body">
                         <h4 class="text-success">Previous Class Notes</h4>
                         <p>${j.studentNotes}</p>
                     </div>
@@ -167,7 +179,6 @@ function addStudentInfo(change) {
                     <button type="button" id="${smallName}-verify-payment-button" onclick="callTwoFuncs(this.id)" class="btn btn-warning" data-id="${change.doc.id}">Verify Payment</button>
                 </div>
             </div>
-            
         </div>
     </div>
     `;
@@ -176,6 +187,59 @@ function addStudentInfo(change) {
     myTabContent.innerHTML += studentInfo;
     
     i++;
+
+    let docRef = db.collection("students").doc(change.doc.id).collection('classes');
+    let dates = [];
+    let notes = [];
+
+    // Get individual classes
+
+    docRef.get().then((snapshot) => {
+        snapshot.docs.forEach(doc => {
+            console.log(doc.data());
+            dates.push(doc.data().date);
+            notes.push(doc.data().classNotes)
+        })
+    })
+
+    let tabName = document.querySelector(`#${smallName}`);
+    let accordionName = document.querySelector(`#${smallName}-accordion`);
+
+    let accordion = document.createElement('DIV');
+    accordion.className = `"accordion col-md-4 col-sm-4 ${smallName}-accordion d-none"`;
+    accordion.setAttribute('id', smallName + "-accordion");
+
+    console.log(dates);
+    
+    for (let a = 0; a < dates.length; a++) {
+        let innerAccordion = document.createElement('DIV');
+        innerAccordion.className = "accordion-item";
+        innerAccordion.innerHTML = `
+        <h2 class="accordion-header" id="${smallName}-heading${a}">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#${smallName}-collapse${a}" aria-expanded="true" aria-controls="collapse${a}">
+                ${dates[a]}
+            </button>
+        </h2>
+        <div id="${smallName}-collapse${a}" class="accordion-collapse collapse show" aria-labelledby="${smallName}-heading${a}" data-bs-parent="#${smallName}-accordion">
+            <div class="accordion-body">
+                <p>${notes[a]}</p>
+            </div>
+        </div>
+        `
+        
+        console.log(a)
+        accordion.appendChild(innerAccordion);
+    }
+    bodyDiv.appendChild(accordion);
+
+    tabName.addEventListener('click', () => {
+        if(newStudent.classList.contains('d-none') === true && newClass.classList.contains('d-none') === true && deleteStudent.classList.contains('d-none') === true && uploadPhoto.classList.contains('d-none') === true) {
+            accordionName.classList.remove('d-none');
+        } else {
+            accordionName.classList.add('d-none');
+        }
+
+    })
 }
 
 // Real-time Listener
@@ -244,19 +308,99 @@ addNewClassButton.addEventListener('click', (e) => {
     e.stopPropagation();
 
     let id = studentSelect.value;
+    let idSmall = id.toLowerCase();
     let classDateValue = classDate.value;
     let classNotesValue = classNotes.value;
     const increment = firebase.firestore.FieldValue.increment(1);
-    
+    let dateNotesBefore = `[{"date": "${classDateValue}","notes": "${classNotesValue}"}]`;
+    let dateNotesArr = JSON.parse(dateNotesBefore);
+    const dateObj = Object.assign({}, dateNotesArr)
+
+    console.log(dateObj);
+
+    console.log(typeof dateObj);
 
     db.collection('students').doc(id).update({
         numClasses: increment,
-        classDates: classDateValue,
         studentNotes: classNotesValue
     })
+
+    db.collection('students').doc(id).collection('classes').doc(`"${classDateValue}"`).set({
+        date: classDateValue,
+        classNotes: classNotesValue
+    });
     alert("Class added successfully")
 });
 
 
+// function createAccordion(id, date, notes){
+//     let element = document.querySelector("#" + id + "-accordion");
 
+//     if(typeof(element) == 'undefined' && element == null) {
+//     // Make parent div
+//     let accordion = document.createElement("DIV");
+//     accordion.classList.add('accordion')
+//                         .add('col-md-4')
+//                         .add('col-sm-4');
+//     accordion.setAttribute("id", id + "-accordion");
+    
+//     // Make child div
+//     let accordionItem = document.createElement('DIV');
+//     accordionItem.classList.add('accordion-item');
 
+//     // Make H2
+//     let accordionH2 = document.createElement('H2');
+//     accordionH2.classList.add('accordion-header');
+//     accordionH2.setAttribute("id", "class1");
+
+//     // Make button
+//     let button = document.createElement('BUTTON');
+//     button.classList.add('accordion-button')
+//                     .add('collapsed');
+//     button.setAttribute("type", "button")
+//             .setAttribute("data-bs-toggle", "collapsed")
+//             .setAttribute("data-bs-target", "#collapseClass1")
+//             .setAttribute("aria-expanded", "true")
+//             .setAttribute("aria-controls", "collapseClass1");
+
+//     // Put date as header
+
+//     button.innerHTML = date;
+    
+//     // Append Header Div
+//     accordion.appendChild(accordionItem);
+//     accordionItem.appendChild(accordionH2);
+//     accordionH2.appendChild(button);
+
+//     // Create accordion body parent div
+//     let accordionBodyParent = document.createElement('DIV');
+//     accordionBodyParent.classList.add('accordion-collapse')
+//                                 .add('collapse')
+//                                 .add('show');
+//     accordionBodyParent.setAttribute('id', "collapseClass1")
+//                         .setAttribute('aria-labelledby', "class1")
+//                         .setAttribute("data-bs-parent", id + "-accordion");
+
+//     let accordionBodyChild = document.createElement('DIV');
+//     accordionBodyChild.classList.add('accordion-body');
+
+//     // Put notes inside accordion body
+
+//     accordionBodyChild.innerHTML += notes
+
+//     // Append Child div
+
+//     accordionBodyChild.appendChild(button);
+//     accordionBodyParent.appendChild(accordionBodyChild);
+
+//     // Append first class to accordion div
+
+//     accordion.appendChild(accordionBodyParent);
+
+//     document.querySelector(".body-div").appendChild(accordion);
+
+//     } 
+
+// }
+
+// console.log(createAccordion("john", "2021-01-31", "Great student!"));

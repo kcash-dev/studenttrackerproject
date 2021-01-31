@@ -154,6 +154,7 @@ footer {
 
 .student-info {
   margin-top: 20px;
+  text-align: left;
 }
 
 .student-profile {
@@ -164,7 +165,7 @@ footer {
 }
 
 .student-profile-buttons-all {
-  margin: 25px auto;
+  margin: 10px auto;
   text-align: left;
 }
 
@@ -184,7 +185,71 @@ footer {
 }
 
 
+
+.tab-pane {
+  margin-top: 20px;
+}
+
+
 .table {
   color: white;
+}
+
+/** Extra Small (575px and below) **/
+@media (max-width: 575px) {
+  
+}
+
+/** Small devices (landscape phones, 576px and up) **/
+@media (min-width: 576px) and (max-width: 767px) { 
+  
+}
+
+/** Medium devices (tablets, 768px and up) **/
+@media (min-width: 768px) and (max-width: 991px) {
+  
+}
+
+/** Large devices (desktops, 992px and up) **/
+@media (min-width: 992px) and (max-width: 1199px) {
+  #new-buttons {
+    position: absolute;
+    bottom: 550px;
+    left: 550px;
+  }
+
+  .student-video-body {
+    width: 80%;
+  }
+
+  .student-video-body iframe {
+    width: 100%;
+  }
+  .student-info {
+    font-size: 1rem;
+  }
+
+  .student-info h2 {
+    font-size: 1.4rem;
+  }
+
+  .student-notes-card-body {
+    margin-bottom: 20px;
+  }
+
+  .student-profile-buttons-all {
+    transform: scale(.8, .8)
+  }
+
+  .student-profile-photo {
+    transform: scale(.9, .9)
+  }
+}
+
+/** Extra large devices (large desktops, 1200px and up) **/
+@media (min-width: 1200px) { ... }
+
+
+
 }
   

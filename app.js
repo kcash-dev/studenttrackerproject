@@ -1,11 +1,9 @@
-const newStudent = document.querySelector('.add-new-student');
-const newClass = document.querySelector('.add-new-class');
-const deleteStudent = document.querySelector('.delete-student');
-const uploadPhoto = document.querySelector('.add-student-photo');
+
 const popup = document.querySelector('.popup-wrapper');
 const payment = document.getElementsByClassName('.payment-container');
 const verifyButton = document.querySelector('.verify-button');
 const cancelButton = document.querySelector('.cancel-button');
+const accordion = document.querySelector('.accordion');
 
 
 
@@ -141,3 +139,11 @@ cancelButton.addEventListener('click', (e) => {
     e.preventDefault();
     popup.classList.add('d-none');
 })
+
+// if (uploadPhoto.classList.contains('d-none') === false || newClass.classList.contains('d-none') === false || deleteStudent.classList.contains('d-none') || newStudent.classList.contains('d-none') {
+//     accordion.classList.add('d-none');
+// } else {
+//     if (accordion.classList.contains('d-none') === true) {
+//         accordion.classList.remove('d-none');
+//     }
+// }
