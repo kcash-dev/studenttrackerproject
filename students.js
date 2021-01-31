@@ -50,11 +50,14 @@ function addStudentInfo(change) {
     month[11] = "December";
     var month = month[d.getMonth()];
 
+    // Total Calculation
 
     let rate = 26;
     let hours = (j.numClasses * j.classLength) / 60;
     let monthTotal = hours * rate;
     
+    
+
     studentCollection.push(change.doc.data());
 
     let studentPhoto;
@@ -109,7 +112,7 @@ function addStudentInfo(change) {
     // Create student info on tab
     studentInfo = `
     <div data-id="${change.doc.id}" class="tab-pane fade row" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
-        <div class="col-md-12 col-sm-12 row student-profile bg-success">
+        <div class="col-md-12 col-sm-12 row student-profile bg-info m-0">
             <div class="student-info col-md-6 col-sm-6">
                 <h2>${j.name}</h2>
                 Birthday: ${j.birthday}<br>
@@ -157,7 +160,7 @@ function addStudentInfo(change) {
                         <tr>
                             <th scope="row">${j.numClasses}</th>
                             <td>$${rate}</td>
-                            <td>$${monthTotal}</td>
+                            <td class="month-total">$${monthTotal}</td>
                         </tr>
                         </tbody>
                     </table>
