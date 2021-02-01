@@ -80,7 +80,7 @@ function addStudentInfo(change) {
         studentPhoto = j.studentPhotoURL
     }
 
-    let newStudent = '';
+    let newStudentInfo = '';
     let studentInfo = '';
     let studentTab = '';
     let photoUploadInfo = '';
@@ -100,14 +100,14 @@ function addStudentInfo(change) {
 
 
     // Create student option in select for new class tab
-    newStudent = `<option value="${change.doc.id}" data-id="${change.doc.id}">${j.name}</option>`;
-    studentSelect.innerHTML += newStudent;
+    newStudentInfo = `<option value="${change.doc.id}" data-id="${change.doc.id}">${j.name}</option>`;
+    studentSelect.innerHTML += newStudentInfo;
 
 
     // Create student tab
     studentTab = `
     <li class="nav-item" role="presentation" data-id="${change.doc.id}">
-        <a class="nav-link" id="home-tab" data-bs-toggle="tab" href="#${smallName}" role="tab" aria-controls="home" aria-selected="true">${j.name}</a>
+        <a class="nav-link student-tab" id="${smallName}-home-tab" data-bs-toggle="tab" href="#${smallName}" role="tab" aria-controls="home" aria-selected="true">${j.name}</a>
     </li>
     `
     myTab.innerHTML += studentTab;
@@ -189,58 +189,93 @@ function addStudentInfo(change) {
     i++;
 
     let docRef = db.collection("students").doc(change.doc.id).collection('classes');
-    let dates = [];
-    let notes = [];
-
-    // Get individual classes
-
-    docRef.get().then((snapshot) => {
-        snapshot.docs.forEach(doc => {
-            console.log(doc.data());
-            dates.push(doc.data().date);
-            notes.push(doc.data().classNotes)
-        })
-    })
-
-    let tabName = document.querySelector(`#${smallName}`);
-    let accordionName = document.querySelector(`#${smallName}-accordion`);
-
-    let accordion = document.createElement('DIV');
-    accordion.className = `"accordion col-md-4 col-sm-4 ${smallName}-accordion d-none"`;
-    accordion.setAttribute('id', smallName + "-accordion");
-
-    console.log(dates);
     
-    for (let a = 0; a < dates.length; a++) {
-        let innerAccordion = document.createElement('DIV');
-        innerAccordion.className = "accordion-item";
-        innerAccordion.innerHTML = `
-        <h2 class="accordion-header" id="${smallName}-heading${a}">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#${smallName}-collapse${a}" aria-expanded="true" aria-controls="collapse${a}">
-                ${dates[a]}
-            </button>
-        </h2>
-        <div id="${smallName}-collapse${a}" class="accordion-collapse collapse show" aria-labelledby="${smallName}-heading${a}" data-bs-parent="#${smallName}-accordion">
-            <div class="accordion-body">
-                <p>${notes[a]}</p>
-            </div>
-        </div>
-        `
+    
+    // Get individual classes
+    
+    function getClassHistory() {
+        const classes = [];
+        docRef.get().then((snapshot) => {
+            snapshot.forEach(doc => {
+                classes.push(doc.data());
+            })
+        })
+        console.log(classes);
+        return classes;
         
-        console.log(a)
-        accordion.appendChild(innerAccordion);
     }
-    bodyDiv.appendChild(accordion);
 
-    tabName.addEventListener('click', () => {
-        if(newStudent.classList.contains('d-none') === true && newClass.classList.contains('d-none') === true && deleteStudent.classList.contains('d-none') === true && uploadPhoto.classList.contains('d-none') === true) {
-            accordionName.classList.remove('d-none');
-        } else {
-            accordionName.classList.add('d-none');
+    async function makeClassTab () {
+        const classHistory = await getClassHistory();
+        const dates = [];
+        const notes = [];
+
+        for (const k in classHistory) {
+            const v = classHistory[k];
+            console.log(v);
         }
 
-    })
+        let tabName = document.querySelector(`#${smallName}-home-tab`);
+        let accordionName = document.querySelector(`#${smallName}-accordion`);
+
+        let accordion = document.createElement('DIV');
+        accordion.className = `accordion col-md-4 col-sm-4 d-none`;
+        accordion.setAttribute('id', `${smallName}-accordion`);
+
+        for (let a = 0; a <= dates.length; a++) {
+            console.log(a);
+            console.log(dates[a]);
+            let innerAccordion = document.createElement('DIV');
+            innerAccordion.className = "accordion-item";
+            let innerAccordionH2 = document.createElement('H2');
+            innerAccordionH2.className = "accordion-header";
+            innerAccordionH2.setAttribute("id", `${smallName}-heading${a}`);
+            let innerAccordionButton = document.createElement("BUTTON");
+            innerAccordionButton.className = "accordion-button";
+            innerAccordionButton.setAttribute('type', 'button');
+            innerAccordionButton.setAttribute("data-bs-toggle", "collapse");
+            innerAccordionButton.setAttribute("data-bs-target", `#${smallName}-collapse${a}`);
+            innerAccordionButton.setAttribute("aria-expanded", "true");
+            innerAccordionButton.setAttribute("aria-controls", `collapse${a}`);
+            innerAccordionButton.innerHTML += dates[a];
+
+            let innerAccordionBodyParent = document.createElement('DIV');
+            innerAccordionBodyParent.setAttribute("id", `${smallName}-collapse${a}`);
+            innerAccordionBodyParent.className = "accordion-collapse collapse show";
+            innerAccordionBodyParent.setAttribute("aria-labelledby", `${smallName}-heading${a}`);
+            innerAccordionBodyParent.setAttribute("data-bs-parent", `#${smallName}-accordion`);
+
+            let innerAccordionBody = document.createElement('DIV');
+            innerAccordionBody.className = "accordion-body";
+
+            let notesPar = document.createElement('P');
+            notesPar.innerHTML += notes[a];
+            
+            
+            innerAccordionBody.appendChild(notesPar);
+            innerAccordionBodyParent.appendChild(innerAccordionBody);
+            innerAccordionH2.appendChild(innerAccordionButton);
+            innerAccordion.appendChild(innerAccordionH2);
+            innerAccordion.appendChild(innerAccordionBodyParent);
+            accordion.appendChild(innerAccordion);
+
+            a++;
+        };
+        
+        bodyDiv.appendChild(accordion);
+        tabName.addEventListener('click', (e) => {
+            if(newStudent.classList.contains('d-none') === true && newClass.classList.contains('d-none') === true && deleteStudent.classList.contains('d-none') === true && uploadPhoto.classList.contains('d-none') === true) {
+                accordionName.classList.remove('d-none');
+            } else {
+                accordionName.classList.add('d-none');
+            }
+
+        })
+    }
+    makeClassTab();
 }
+
+
 
 // Real-time Listener
 db.collection('students').orderBy('name').onSnapshot(snapshot => {
@@ -255,7 +290,6 @@ db.collection('students').orderBy('name').onSnapshot(snapshot => {
     })
 });
 
-console.log(studentCollection);
 
 // Add student to server
 
