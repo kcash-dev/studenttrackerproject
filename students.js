@@ -192,91 +192,91 @@ function addStudentInfo(change) {
     
     
     // Get individual classes
-    
-    function getClassHistory() {
-        const classes = [];
-        docRef.get().then((snapshot) => {
-            snapshot.forEach(doc => {
-                classes.push(doc.data());
-            })
-        })
-        console.log(classes);
-        return classes;
         
-    }
-
-    async function makeClassTab () {
-        const classHistory = await getClassHistory();
-        const dates = [];
-        const notes = [];
-
-        for (const k in classHistory) {
-            const v = classHistory[k];
-            console.log(v);
-        }
-
-        let tabName = document.querySelector(`#${smallName}-home-tab`);
-        let accordionName = document.querySelector(`#${smallName}-accordion`);
+    docRef.get().then((snapshot) => {
+        a = 1;
 
         let accordion = document.createElement('DIV');
         accordion.className = `accordion col-md-4 col-sm-4 d-none`;
         accordion.setAttribute('id', `${smallName}-accordion`);
 
-        for (let a = 0; a <= dates.length; a++) {
-            console.log(a);
-            console.log(dates[a]);
-            let innerAccordion = document.createElement('DIV');
-            innerAccordion.className = "accordion-item";
-            let innerAccordionH2 = document.createElement('H2');
-            innerAccordionH2.className = "accordion-header";
-            innerAccordionH2.setAttribute("id", `${smallName}-heading${a}`);
-            let innerAccordionButton = document.createElement("BUTTON");
-            innerAccordionButton.className = "accordion-button";
-            innerAccordionButton.setAttribute('type', 'button');
-            innerAccordionButton.setAttribute("data-bs-toggle", "collapse");
-            innerAccordionButton.setAttribute("data-bs-target", `#${smallName}-collapse${a}`);
-            innerAccordionButton.setAttribute("aria-expanded", "true");
-            innerAccordionButton.setAttribute("aria-controls", `collapse${a}`);
-            innerAccordionButton.innerHTML += dates[a];
+        snapshot.forEach(doc => {
+            let docData = doc.data();
+            let classesObj = docData;
+            let date = [];
+            let notes = [];
+            date.push(classesObj.date);
+            notes.push(classesObj.classNotes);
 
-            let innerAccordionBodyParent = document.createElement('DIV');
-            innerAccordionBodyParent.setAttribute("id", `${smallName}-collapse${a}`);
-            innerAccordionBodyParent.className = "accordion-collapse collapse show";
-            innerAccordionBodyParent.setAttribute("aria-labelledby", `${smallName}-heading${a}`);
-            innerAccordionBodyParent.setAttribute("data-bs-parent", `#${smallName}-accordion`);
+            let accordionItem = document.createElement('DIV');
+            accordionItem.className = "accordion-item";
 
-            let innerAccordionBody = document.createElement('DIV');
-            innerAccordionBody.className = "accordion-body";
+            let accordionH2 = document.createElement('H2');
+            accordionH2.className = "accordion-header";
+            accordionH2.setAttribute('id', `heading${a}`);
 
-            let notesPar = document.createElement('P');
-            notesPar.innerHTML += notes[a];
-            
-            
-            innerAccordionBody.appendChild(notesPar);
-            innerAccordionBodyParent.appendChild(innerAccordionBody);
-            innerAccordionH2.appendChild(innerAccordionButton);
-            innerAccordion.appendChild(innerAccordionH2);
-            innerAccordion.appendChild(innerAccordionBodyParent);
-            accordion.appendChild(innerAccordion);
+            let accordionButton = document.createElement('BUTTON');
+            accordionButton.className = "accordion-button";
+            accordionButton.setAttribute('type', 'button');
+            accordionButton.setAttribute('data-bs-toggle', 'collapse');
+            accordionButton.setAttribute('data-bs-target', `#collapse${a}`);
+            accordionButton.setAttribute('aria-expanded', "true");
+            accordionButton.setAttribute('aria-controls', `collapse${a}`)
+            accordionButton.innerHTML = date;
+
+            // Append Selection elements together
+            accordionH2.appendChild(accordionButton);
+            accordionItem.appendChild(accordionH2);
+
+            let accordionCollapse = document.createElement('DIV');
+            accordionCollapse.setAttribute('id', `collapse${a}`);
+            accordionCollapse.className = "accordion-collapse collapse";
+            accordionCollapse.setAttribute('aria-labelledby', `heading${a}`);
+            accordionCollapse.setAttribute('data-bs-parent', `${smallName}-accordion`);
+
+            let accordionBody = document.createElement('DIV');
+            accordionBody.className = "accordion-body";
+
+            let pTag = document.createElement('P');
+            pTag.innerHTML = notes[0];
+
+            // Append Body Elements together
+            accordionBody.appendChild(pTag);
+            accordionCollapse.appendChild(accordionBody);
+
+            // Append to Accordion Parent Div
+
+            accordion.appendChild(accordionItem);
+            accordion.appendChild(accordionCollapse);
+        
+            bodyDiv.appendChild(accordion);
+            console.log(accordion);
 
             a++;
-        };
-        
-        bodyDiv.appendChild(accordion);
-        tabName.addEventListener('click', (e) => {
-            if(newStudent.classList.contains('d-none') === true && newClass.classList.contains('d-none') === true && deleteStudent.classList.contains('d-none') === true && uploadPhoto.classList.contains('d-none') === true) {
-                accordionName.classList.remove('d-none');
-            } else {
-                accordionName.classList.add('d-none');
-            }
 
+            const tabName = document.querySelector(`#${smallName}-home-tab`);
+            const accordions = document.querySelectorAll('.accordion');
+            const accordionName = document.querySelector(`#${smallName}-accordion`);
+            tabName.addEventListener('click', (e) => {
+                    if(accordionName == null){
+                        accordions.forEach(div => {
+                            div.classList.add('d-none');
+                        });
+                    } else if (newStudent.classList.contains('d-none') === false || newClass.classList.contains('d-none') === false || deleteStudent.classList.contains('d-none') === false || uploadPhoto.classList.contains('d-none') === false) {
+                        accordionName.classList.add('d-none');
+                    } else {
+                        accordions.forEach(div => {
+                            div.classList.add('d-none');
+                        });
+                        accordionName.classList.remove('d-none');
+                    }
+            })
         })
-    }
-    makeClassTab();
+    });
+    
+
+
 }
-
-
-
 // Real-time Listener
 db.collection('students').orderBy('name').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();
