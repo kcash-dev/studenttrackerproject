@@ -35,7 +35,6 @@ let studentCollection = []
 let i = 1;
 
 function addStudentInfo(change) {
-    
     // Populate Student info
     const j = new Student(change.doc.data().name, change.doc.data().birthday, change.doc.data().nationality, change.doc.data().numClasses, change.doc.data().classLength, change.doc.data().studentNotes, change.doc.data().studentPhotoURL, change.doc.data().studentVideoURL, change.doc.data().paidMonth);
     
@@ -66,7 +65,25 @@ function addStudentInfo(change) {
     var year = dateObj.getUTCFullYear();
     
     newdate = year + "-0" + month1;
+
+    // Format birthday
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.toLocaleString('default', { month: 'long' }),
+            day = '' + d.getDay(),
+            year = d.getFullYear(),
     
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [month, day, year].join('-');
+    }
+
+    let birthday = formatDate(j.birthday);
+
+    console.log(birthday);
 
     studentCollection.push(change.doc.data());
 
@@ -86,22 +103,31 @@ function addStudentInfo(change) {
 
     
     // Get individual classes
+
+    let accordion = document.createElement('DIV');
+    accordion.className = `accordion col-md-4 col-sm-4 d-none`;
+    accordion.setAttribute('id', `${smallName}-accordion`);
+    
+    let h2 = document.createElement('H3');
+    h2.className = 'text-center text-success';
+    h2.innerHTML = 'Class History';
+    accordion.appendChild(h2);
+
     let docRef = db.collection("students").doc(change.doc.id).collection(newdate + ' classes');
+
     docRef.get().then((snapshot) => {
         a = 1;
-    
-        let accordion = document.createElement('DIV');
-        accordion.className = `accordion col-md-4 col-sm-4 d-none`;
-        accordion.setAttribute('id', `${smallName}-accordion`);
-        
         snapshot.forEach(doc => {
+            console.log(doc.data());
             let docData = doc.data();
             let classesObj = docData;
             let date = [];
             let notes = [];
             date.push(classesObj.date);
             notes.push(classesObj.classNotes);
-            console.log(docData);
+
+            let classDate = formatDate(date);
+
             // Make accordion item outer
             let accordionItem = document.createElement('DIV');
             accordionItem.className = "accordion-item";
@@ -119,7 +145,7 @@ function addStudentInfo(change) {
             accordionButton.setAttribute('data-bs-target', `#collapse${a}`);
             accordionButton.setAttribute('aria-expanded', "true");
             accordionButton.setAttribute('aria-controls', `collapse${a}`)
-            accordionButton.innerHTML = date;
+            accordionButton.innerHTML = classDate;
 
             // Append Selection elements together
             accordionH2.appendChild(accordionButton);
@@ -159,7 +185,7 @@ function addStudentInfo(change) {
             
             tabName.addEventListener('click', () => {
                 accordions.forEach(acc => {
-                    if (acc === accordionName){
+                    if (acc.id === accordionName.id){
                         console.log(accordionName);
                         acc.classList.remove('d-none');
                     } else {
@@ -194,7 +220,7 @@ function addStudentInfo(change) {
     `
     myTab.innerHTML += studentTab;
 
-    
+    // Payment card
     function getPayment(classes, payment) {
         let paymentTab = '';
         let rate = 26;
@@ -209,6 +235,8 @@ function addStudentInfo(change) {
             paymentVerification = 'bg-danger'
         }
         
+        console.log(change.doc.id);
+
         paymentTab = `<div class="col-md-12 col-sm-12 payment-container">
             <div class="card ${paymentVerification} ${smallName}-payment-card" data-id="${change.doc.id}">
                 <div class="card-body text-center">
@@ -241,14 +269,15 @@ function addStudentInfo(change) {
 
     // get numClasses of month
 
-    let monthNumClasses = ''
+    let monthNumClasses = 0;
     let payment;
     db.collection('students').doc(change.doc.id).collection(`${newdate} classes`).get().then((snapshot) => {
         snapshot.forEach(doc => {
-            monthNumClasses = doc.data().numClasses;
+            monthNumClasses++;
             payment = doc.data().paidMonth;
-            getPayment(monthNumClasses, payment);
+            
         })
+        getPayment(monthNumClasses, payment);
     })
 
     
@@ -260,7 +289,7 @@ function addStudentInfo(change) {
         <div class="col-md-12 col-sm-12 row student-profile bg-info m-0">
             <div class="student-info col-md-6 col-sm-6">
                 <h2>${j.name}</h2>
-                Birthday: ${j.birthday}<br>
+                Birthday: ${birthday}<br>
                 Nationality: ${j.nationality}<br>
                 Number of Classes: ${j.numClasses} classes<br>
                 Class Length: ${j.classLength} minutes<br>
@@ -300,7 +329,7 @@ function addStudentInfo(change) {
 
 
 
-    
+    console.log(studentCollection);
     
     
 
@@ -332,7 +361,6 @@ newStudentForm.addEventListener('submit', (e) => {
         classLength: newStudentForm.classLength.value,
         studentNotes: newStudentForm.newStudentNotes.value,
         numClasses: 0,
-
     })
 
     newStudentForm.name.value = '';
