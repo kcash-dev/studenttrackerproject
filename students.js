@@ -41,8 +41,6 @@ function addStudentInfo(change) {
     
     
     let smallName = j.name.toLowerCase();
-
-
     
     // Date
 
@@ -62,12 +60,12 @@ function addStudentInfo(change) {
     month[11] = "December";
     var month = month[d.getMonth()];
 
-    // Total Calculation
-
-    let rate = 26;
-    let hours = (j.numClasses * j.classLength) / 60;
-    let monthTotal = hours * rate;
+    // Month&Day YYYY-MM formation
+    var dateObj = new Date();
+    var month1 = dateObj.getUTCMonth() + 1; //months from 1-12
+    var year = dateObj.getUTCFullYear();
     
+    newdate = year + "-0" + month1;
     
 
     studentCollection.push(change.doc.data());
@@ -87,6 +85,90 @@ function addStudentInfo(change) {
     let deleteStudentSelect = '';
 
     
+    // Get individual classes
+    let docRef = db.collection("students").doc(change.doc.id).collection(newdate + ' classes');
+    docRef.get().then((snapshot) => {
+        a = 1;
+    
+        let accordion = document.createElement('DIV');
+        accordion.className = `accordion col-md-4 col-sm-4 d-none`;
+        accordion.setAttribute('id', `${smallName}-accordion`);
+        
+        snapshot.forEach(doc => {
+            let docData = doc.data();
+            let classesObj = docData;
+            let date = [];
+            let notes = [];
+            date.push(classesObj.date);
+            notes.push(classesObj.classNotes);
+            console.log(docData);
+            // Make accordion item outer
+            let accordionItem = document.createElement('DIV');
+            accordionItem.className = "accordion-item";
+
+            // Make accordion H2
+            let accordionH2 = document.createElement('H2');
+            accordionH2.className = "accordion-header";
+            accordionH2.setAttribute('id', `heading${a}`);
+
+            // Make accordion button
+            let accordionButton = document.createElement('BUTTON');
+            accordionButton.className = "accordion-button";
+            accordionButton.setAttribute('type', 'button');
+            accordionButton.setAttribute('data-bs-toggle', 'collapse');
+            accordionButton.setAttribute('data-bs-target', `#collapse${a}`);
+            accordionButton.setAttribute('aria-expanded', "true");
+            accordionButton.setAttribute('aria-controls', `collapse${a}`)
+            accordionButton.innerHTML = date;
+
+            // Append Selection elements together
+            accordionH2.appendChild(accordionButton);
+            accordionItem.appendChild(accordionH2);
+
+            // Make accordion collapse outer
+            let accordionCollapse = document.createElement('DIV');
+            accordionCollapse.setAttribute('id', `collapse${a}`);
+            accordionCollapse.className = "accordion-collapse collapse";
+            accordionCollapse.setAttribute('aria-labelledby', `heading${a}`);
+            accordionCollapse.setAttribute('data-bs-parent', `${smallName}-accordion`);
+
+            // Make accordion body
+            let accordionBody = document.createElement('DIV');
+            accordionBody.className = "accordion-body";
+
+            // Make P tag to hold notes
+            let pTag = document.createElement('P');
+            pTag.innerHTML = notes[0];
+
+            // Append Body Elements together
+            accordionBody.appendChild(pTag);
+            accordionCollapse.appendChild(accordionBody);
+
+            // Append to Accordion Parent Div
+            accordion.appendChild(accordionItem);
+            accordion.appendChild(accordionCollapse);
+            
+            // Append to body
+            bodyDiv.appendChild(accordion);
+
+            a++;
+
+            const tabName = document.querySelector(`#${smallName}-home-tab`);
+            const accordions = document.querySelectorAll('.accordion');
+            const accordionName = document.querySelector(`#${smallName}-accordion`);
+            
+            tabName.addEventListener('click', () => {
+                accordions.forEach(acc => {
+                    if (acc === accordionName){
+                        console.log(accordionName);
+                        acc.classList.remove('d-none');
+                    } else {
+                        acc.classList.add('d-none');
+                    }
+                })
+            })
+        })
+    });
 
     // Populate Photo form with students
 
@@ -112,13 +194,64 @@ function addStudentInfo(change) {
     `
     myTab.innerHTML += studentTab;
 
-    // Check Payment Status
-    let paymentVerification = undefined;
-    if (j.paidMonth === true) {
-        paymentVerification = 'bg-success'
-    } else {
-        paymentVerification = 'bg-danger'
+    
+    function getPayment(classes, payment) {
+        let paymentTab = '';
+        let rate = 26;
+        let hours = (classes * j.classLength) / 60;
+        let monthTotal = hours * rate;
+
+        // Check Payment Status
+        let paymentVerification = undefined;
+        if (payment === true) {
+            paymentVerification = 'bg-success'
+        } else {
+            paymentVerification = 'bg-danger'
+        }
+        
+        paymentTab = `<div class="col-md-12 col-sm-12 payment-container">
+            <div class="card ${paymentVerification} ${smallName}-payment-card" data-id="${change.doc.id}">
+                <div class="card-body text-center">
+                    <h1 class="text-center paymentH1">${month} Payment</h1>
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">Total Classes</th>
+                            <th scope="col">Rate</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">${classes}</th>
+                            <td>$${rate}</td>
+                            <td class="month-total">$${monthTotal}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" id="${smallName}-verify-payment-button" onclick="callTwoFuncs(this.id)" class="btn btn-warning" data-id="${change.doc.id}">Verify Payment</button>
+                </div>
+            </div>
+        </div>
+        `
+
+        const parentDiv = document.querySelector('#' + smallName);
+        parentDiv.innerHTML += paymentTab;
     }
+
+    // get numClasses of month
+
+    let monthNumClasses = ''
+    let payment;
+    db.collection('students').doc(change.doc.id).collection(`${newdate} classes`).get().then((snapshot) => {
+        snapshot.forEach(doc => {
+            monthNumClasses = doc.data().numClasses;
+            payment = doc.data().paidMonth;
+            getPayment(monthNumClasses, payment);
+        })
+    })
+
+    
 
 
     // Create student info on tab
@@ -156,30 +289,7 @@ function addStudentInfo(change) {
                 <img id="${smallName}-photo" src="${studentPhoto}" width="100%" alt="Student Photo">
             </div>
         </div>
-        <div class="col-md-12 col-sm-12 payment-container">
-            <div class="card ${paymentVerification} ${smallName}-payment-card" data-id="${change.doc.id}">
-                <div class="card-body text-center">
-                    <h1 class="text-center paymentH1">${month} Payment</h1>
-                    <table class="table text-center">
-                        <thead>
-                        <tr>
-                            <th scope="col">Total Classes</th>
-                            <th scope="col">Rate</th>
-                            <th scope="col">Total</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">${j.numClasses}</th>
-                            <td>$${rate}</td>
-                            <td class="month-total">$${monthTotal}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <button type="button" id="${smallName}-verify-payment-button" onclick="callTwoFuncs(this.id)" class="btn btn-warning" data-id="${change.doc.id}">Verify Payment</button>
-                </div>
-            </div>
-        </div>
+        
     </div>
     `;
     
@@ -188,91 +298,10 @@ function addStudentInfo(change) {
     
     i++;
 
-    let docRef = db.collection("students").doc(change.doc.id).collection('classes');
+
+
     
     
-    // Get individual classes
-        
-    docRef.get().then((snapshot) => {
-        a = 1;
-
-        let accordion = document.createElement('DIV');
-        accordion.className = `accordion col-md-4 col-sm-4 d-none`;
-        accordion.setAttribute('id', `${smallName}-accordion`);
-
-        snapshot.forEach(doc => {
-            let docData = doc.data();
-            let classesObj = docData;
-            let date = [];
-            let notes = [];
-            date.push(classesObj.date);
-            notes.push(classesObj.classNotes);
-
-            let accordionItem = document.createElement('DIV');
-            accordionItem.className = "accordion-item";
-
-            let accordionH2 = document.createElement('H2');
-            accordionH2.className = "accordion-header";
-            accordionH2.setAttribute('id', `heading${a}`);
-
-            let accordionButton = document.createElement('BUTTON');
-            accordionButton.className = "accordion-button";
-            accordionButton.setAttribute('type', 'button');
-            accordionButton.setAttribute('data-bs-toggle', 'collapse');
-            accordionButton.setAttribute('data-bs-target', `#collapse${a}`);
-            accordionButton.setAttribute('aria-expanded', "true");
-            accordionButton.setAttribute('aria-controls', `collapse${a}`)
-            accordionButton.innerHTML = date;
-
-            // Append Selection elements together
-            accordionH2.appendChild(accordionButton);
-            accordionItem.appendChild(accordionH2);
-
-            let accordionCollapse = document.createElement('DIV');
-            accordionCollapse.setAttribute('id', `collapse${a}`);
-            accordionCollapse.className = "accordion-collapse collapse";
-            accordionCollapse.setAttribute('aria-labelledby', `heading${a}`);
-            accordionCollapse.setAttribute('data-bs-parent', `${smallName}-accordion`);
-
-            let accordionBody = document.createElement('DIV');
-            accordionBody.className = "accordion-body";
-
-            let pTag = document.createElement('P');
-            pTag.innerHTML = notes[0];
-
-            // Append Body Elements together
-            accordionBody.appendChild(pTag);
-            accordionCollapse.appendChild(accordionBody);
-
-            // Append to Accordion Parent Div
-
-            accordion.appendChild(accordionItem);
-            accordion.appendChild(accordionCollapse);
-        
-            bodyDiv.appendChild(accordion);
-            console.log(accordion);
-
-            a++;
-
-            const tabName = document.querySelector(`#${smallName}-home-tab`);
-            const accordions = document.querySelectorAll('.accordion');
-            const accordionName = document.querySelector(`#${smallName}-accordion`);
-            tabName.addEventListener('click', (e) => {
-                    if(accordionName == null){
-                        accordions.forEach(div => {
-                            div.classList.add('d-none');
-                        });
-                    } else if (newStudent.classList.contains('d-none') === false || newClass.classList.contains('d-none') === false || deleteStudent.classList.contains('d-none') === false || uploadPhoto.classList.contains('d-none') === false) {
-                        accordionName.classList.add('d-none');
-                    } else {
-                        accordions.forEach(div => {
-                            div.classList.add('d-none');
-                        });
-                        accordionName.classList.remove('d-none');
-                    }
-            })
-        })
-    });
     
 
 
@@ -292,7 +321,6 @@ db.collection('students').orderBy('name').onSnapshot(snapshot => {
 
 
 // Add student to server
-
 
 newStudentForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -336,105 +364,27 @@ deleteStudentForm.addEventListener('submit', (e) => {
 });
 
 // Add class to student
-
-
 addNewClassButton.addEventListener('click', (e) => {
     e.stopPropagation();
 
     let id = studentSelect.value;
-    let idSmall = id.toLowerCase();
     let classDateValue = classDate.value;
+    let monthYear = classDateValue.slice(0, 7);
     let classNotesValue = classNotes.value;
     const increment = firebase.firestore.FieldValue.increment(1);
     let dateNotesBefore = `[{"date": "${classDateValue}","notes": "${classNotesValue}"}]`;
     let dateNotesArr = JSON.parse(dateNotesBefore);
     const dateObj = Object.assign({}, dateNotesArr)
 
-    console.log(dateObj);
-
-    console.log(typeof dateObj);
-
     db.collection('students').doc(id).update({
         numClasses: increment,
         studentNotes: classNotesValue
     })
 
-    db.collection('students').doc(id).collection('classes').doc(`"${classDateValue}"`).set({
+    db.collection('students').doc(id).collection(`${monthYear} classes`).doc(`${classDateValue}`).set({
         date: classDateValue,
-        classNotes: classNotesValue
+        classNotes: classNotesValue,
+        numClasses: increment
     });
     alert("Class added successfully")
 });
-
-
-// function createAccordion(id, date, notes){
-//     let element = document.querySelector("#" + id + "-accordion");
-
-//     if(typeof(element) == 'undefined' && element == null) {
-//     // Make parent div
-//     let accordion = document.createElement("DIV");
-//     accordion.classList.add('accordion')
-//                         .add('col-md-4')
-//                         .add('col-sm-4');
-//     accordion.setAttribute("id", id + "-accordion");
-    
-//     // Make child div
-//     let accordionItem = document.createElement('DIV');
-//     accordionItem.classList.add('accordion-item');
-
-//     // Make H2
-//     let accordionH2 = document.createElement('H2');
-//     accordionH2.classList.add('accordion-header');
-//     accordionH2.setAttribute("id", "class1");
-
-//     // Make button
-//     let button = document.createElement('BUTTON');
-//     button.classList.add('accordion-button')
-//                     .add('collapsed');
-//     button.setAttribute("type", "button")
-//             .setAttribute("data-bs-toggle", "collapsed")
-//             .setAttribute("data-bs-target", "#collapseClass1")
-//             .setAttribute("aria-expanded", "true")
-//             .setAttribute("aria-controls", "collapseClass1");
-
-//     // Put date as header
-
-//     button.innerHTML = date;
-    
-//     // Append Header Div
-//     accordion.appendChild(accordionItem);
-//     accordionItem.appendChild(accordionH2);
-//     accordionH2.appendChild(button);
-
-//     // Create accordion body parent div
-//     let accordionBodyParent = document.createElement('DIV');
-//     accordionBodyParent.classList.add('accordion-collapse')
-//                                 .add('collapse')
-//                                 .add('show');
-//     accordionBodyParent.setAttribute('id', "collapseClass1")
-//                         .setAttribute('aria-labelledby', "class1")
-//                         .setAttribute("data-bs-parent", id + "-accordion");
-
-//     let accordionBodyChild = document.createElement('DIV');
-//     accordionBodyChild.classList.add('accordion-body');
-
-//     // Put notes inside accordion body
-
-//     accordionBodyChild.innerHTML += notes
-
-//     // Append Child div
-
-//     accordionBodyChild.appendChild(button);
-//     accordionBodyParent.appendChild(accordionBodyChild);
-
-//     // Append first class to accordion div
-
-//     accordion.appendChild(accordionBodyParent);
-
-//     document.querySelector(".body-div").appendChild(accordion);
-
-//     } 
-
-// }
-
-// console.log(createAccordion("john", "2021-01-31", "Great student!"));

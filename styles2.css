@@ -100,6 +100,10 @@ footer {
    height:60px;
 }
 
+#logo {
+  margin-left: 20px;
+}
+
 #myTabContent {
   padding-left: 50px;
   padding-right: 50px;

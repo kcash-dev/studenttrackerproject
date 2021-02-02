@@ -31,7 +31,7 @@
     <div class="container-fluid">
       <nav class="navbar bg-info">
         <a class="navbar-brand">
-          <img src="images/logo.png" alt="Logo" width="30%">
+          <img src="images/logo.png" alt="Logo" id="logo" width="30%">
         </a>
       </nav>
       <div class="row body-div">
@@ -83,13 +83,13 @@
           <form id="add-new-class-form">
             <div class="mb-3">
               <label for="student-select">Student Name</label>
-              <select class="form-select" id="student-select" aria-label="Select Student">
+              <select class="form-select" id="student-select" aria-label="Select Student" required>
                 <option selected>Student menu</option>
               </select>
             </div>
             <div class="mb-3">
               <label for="class-date" class="form-label">Date</label>
-              <input type="date" class="form-control" id="class-date">
+              <input type="date" class="form-control" id="class-date" required>
             </div>
             <div class="mb-3">
               <label for="class-notes" class="form-label">Class Notes</label>
@@ -105,7 +105,7 @@
           <form id="add-new-student-form">
             <div class="mb-3">
               <label for="new-student-name" class="form-label">Student Name</label>
-              <input type="text" class="form-control" name="name" id="new-student-name">
+              <input type="text" class="form-control" name="name" id="new-student-name" required>
             </div>
             <div class="mb-3">
               <label for="new-student-birthday" class="form-label">Student Birthday</label>
@@ -117,7 +117,7 @@
             </div>
             <div class="mb-3">
               <label for="length-select">Class Length</label>
-              <select class="form-select" id="length-select" name="classLength" aria-label="Select class length">
+              <select class="form-select" id="length-select" name="classLength" aria-label="Select class length" required>
                 <option selected>Select class length</option>
                 <option value="15">15 minutes</option>
                 <option value="30">30 minutes</option>
@@ -139,7 +139,7 @@
           <form id="delete-student-form">
             <div class="mb-3">
               <label for="student-delete-select">Select Student</label>
-              <select class="form-select" id="student-delete-select" name="studentDelete" aria-label="Select student to delete">
+              <select class="form-select" id="student-delete-select" name="studentDelete" aria-label="Select student to delete" required> 
                 <option selected>Select student</option>
               </select>
             </div>

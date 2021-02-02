@@ -130,7 +130,7 @@ verifyButton.addEventListener('click', () => {
     var studentID = document.querySelector(`#${id}`).getAttribute('data-id');
     console.log(studentID);
     
-    db.collection('students').doc(studentID).update({
+    db.collection('students').doc(studentID).collection(newdate + ' classes').update({
         paidMonth: true
     })
 })
@@ -140,10 +140,4 @@ cancelButton.addEventListener('click', (e) => {
     popup.classList.add('d-none');
 })
 
-// if (uploadPhoto.classList.contains('d-none') === false || newClass.classList.contains('d-none') === false || deleteStudent.classList.contains('d-none') || newStudent.classList.contains('d-none') {
-//     accordion.classList.add('d-none');
-// } else {
-//     if (accordion.classList.contains('d-none') === true) {
-//         accordion.classList.remove('d-none');
-//     }
-// }
+
