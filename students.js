@@ -264,7 +264,7 @@ function addStudentInfo(change) {
                         </tr>
                         </tbody>
                     </table>
-                    <button type="button" id="${smallName}-verify-payment-button" onclick="callTwoFuncs(this.id)" class="btn btn-warning" data-id="${change.doc.id}">Verify Payment</button>
+                    <button type="button" id="${smallName}-verify-payment-button" onclick="callTwoFuncs(this.id)" class="btn btn-warning verify-button" data-id="${change.doc.id}"><i class="fas fa-check"></i></button>
                 </div>
             </div>
         </div>

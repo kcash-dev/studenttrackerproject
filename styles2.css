@@ -1,9 +1,9 @@
 body, html {
-    font-size: 16px;
-    font-family: 'Acme', sans-serif;
-    margin:0;
-    padding:0;
-    height:100%;
+  font-size: 16px;
+  font-family: 'Acme', sans-serif;
+  margin:0;
+  padding:0;
+  height:100%;
 }
 
 .accordion {
@@ -36,12 +36,16 @@ body, html {
   margin-left: 20px;
 }
 
+.add-student-photo-form h2 {
+  margin-top: 20px;
+}
+
 .add-student-photo h2, .add-new-class h2, .add-new-student h2, .delete-student h2 {
   margin-top: 20px;
 }
 
 #add-new-class-button, #add-new-student-button, #student-notes-collapse-button, #delete-student-form-button, #student-video-collapse-button, 
-#add-student-video-url-button {
+#add-student-video-url-button, #upload-button, #video-upload-button, .verify-button, .card-body button {
     width: 4em;
 	  height: 4em;
     color: white;
@@ -51,7 +55,7 @@ body, html {
 
 #add-new-class-button:hover, #add-new-student-button:hover, #student-notes-collapse-button:hover, #delete-student-form-button:hover, 
 #student-video-collapse-button:hover, #add-student-video-url-button:hover, #upload-image-button:hover, #delete-student-button:hover, #add-student-button:hover,
-#add-class-button:hover {
+#add-class-button:hover, #upload-button:hover, #video-upload-button:hover, .verify-button:hover, .card-body button:hover {
     transform: scale(1.1, 1.1);
 }
 
@@ -101,6 +105,10 @@ body, html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+
+i {
+  font-size: 1.4rem;
+}
   
 .icon-student:before {
     content: "\e901";
