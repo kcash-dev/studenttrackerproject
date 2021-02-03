@@ -30,6 +30,7 @@ function Student(name, birthday, nationality, numClasses, classLength, studentNo
     this.paidMonth = paidMonth
 }
 
+
 let studentCollection = []
 
 let i = 1;
@@ -67,26 +68,33 @@ function addStudentInfo(change) {
     newdate = year + "-0" + month1;
 
     // Format birthday
+
+    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+    
     function formatDate(date) {
         var d = new Date(date),
-            month = '' + (d.toLocaleString('default', { month: 'long' }),
-            day = '' + d.getDay(),
-            year = d.getFullYear(),
+            month = new Intl.DateTimeFormat('en',{ month: 'long' }).format(d);
+            day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+            year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+            // month = '' + d.getMonth(),
+            // day = '' + d.getDay(),
+            // year = d.getFullYear()
     
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
+        // if (month.length < 2) 
+        //     month = '0' + month;
+        // if (day.length < 2) 
+        //     day = '0' + day;
     
-        return [month, day, year].join('-');
+        return [month, day, year].join(' ');
     }
 
     let birthday = formatDate(j.birthday);
 
-    console.log(birthday);
 
     studentCollection.push(change.doc.data());
 
+
+    // Student photo
     let studentPhoto;
 
     if (j.studentPhotoURL == undefined) {
@@ -235,7 +243,6 @@ function addStudentInfo(change) {
             paymentVerification = 'bg-danger'
         }
         
-        console.log(change.doc.id);
 
         paymentTab = `<div class="col-md-12 col-sm-12 payment-container">
             <div class="card ${paymentVerification} ${smallName}-payment-card" data-id="${change.doc.id}">
@@ -271,7 +278,7 @@ function addStudentInfo(change) {
 
     let monthNumClasses = 0;
     let payment;
-    db.collection('students').doc(change.doc.id).collection(`${newdate} classes`).get().then((snapshot) => {
+    db.collection('test-students').doc(change.doc.id).collection(`${newdate} classes`).get().then((snapshot) => {
         snapshot.forEach(doc => {
             monthNumClasses++;
             payment = doc.data().paidMonth;
@@ -336,7 +343,7 @@ function addStudentInfo(change) {
 
 }
 // Real-time Listener
-db.collection('students').orderBy('name').onSnapshot(snapshot => {
+db.collection('test-students').orderBy('name').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();
     changes.forEach(change => {
         if (change.type == 'added') {
@@ -354,7 +361,7 @@ db.collection('students').orderBy('name').onSnapshot(snapshot => {
 newStudentForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    db.collection('students').add({
+    db.collection('test-students').add({
         name: newStudentForm.name.value,
         birthday: newStudentForm.birthday.value,
         nationality: newStudentForm.nationality.value,
@@ -381,7 +388,7 @@ deleteStudentForm.addEventListener('submit', (e) => {
 
     let id = studentDeleteSelect.value;
 
-    db.collection('students').doc(id).delete();
+    db.collection('test-students').doc(id).delete();
 
     let option = studentSelect.querySelector('[data-id=' + id + ']');
     studentSelect.removeChild(option);
@@ -404,12 +411,12 @@ addNewClassButton.addEventListener('click', (e) => {
     let dateNotesArr = JSON.parse(dateNotesBefore);
     const dateObj = Object.assign({}, dateNotesArr)
 
-    db.collection('students').doc(id).update({
+    db.collection('test-students').doc(id).update({
         numClasses: increment,
         studentNotes: classNotesValue
     })
 
-    db.collection('students').doc(id).collection(`${monthYear} classes`).doc(`${classDateValue}`).set({
+    db.collection('test-students').doc(id).collection(`${monthYear} classes`).doc(`${classDateValue}`).set({
         date: classDateValue,
         classNotes: classNotesValue,
         numClasses: increment

@@ -21,7 +21,7 @@ function uploadImage(){
         .then(url => {
             console.log(url)
             alert("Image Upload Successful")
-            db.collection('students').doc(name).update({
+            db.collection('test-students').doc(name).update({
                 studentPhotoURL: url
             })
         });
@@ -40,7 +40,7 @@ videoUploadButton.addEventListener('click', (e) => {
     let id = studentPhotoSelect.value;
     let studentVideo = video.value;
 
-    db.collection('students').doc(id).update({
+    db.collection('test-students').doc(id).update({
         studentVideoURL: studentVideo
     })
     alert("Video added successfully")
