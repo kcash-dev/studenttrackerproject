@@ -121,7 +121,7 @@ function addStudentInfo(change) {
     h2.innerHTML = 'Class History';
     accordion.appendChild(h2);
 
-    let docRef = db.collection("students").doc(change.doc.id).collection(newdate + ' classes');
+    let docRef = db.collection("test-students").doc(change.doc.id).collection(newdate + ' classes');
 
     docRef.get().then((snapshot) => {
         a = 1;
