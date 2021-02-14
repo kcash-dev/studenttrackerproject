@@ -137,6 +137,105 @@ function addStudentInfo(change) {
     `
     myTab.innerHTML += studentTab;
 
+
+// Get individual classes
+
+let accordion = document.createElement('DIV');
+accordion.className = `accordion col-lg-12 col-md-12 col-sm-12`;
+accordion.setAttribute('id', `${smallName}-accordion`);
+
+let h2 = document.createElement('H3');
+h2.className = 'text-center text-success';
+h2.innerHTML = 'Class History';
+accordion.appendChild(h2);
+
+let docRef = db.collection("test-students").doc(change.doc.id).collection(newdate + ' classes');
+
+docRef.get().then((snapshot) => {
+    const studentTabsBody = document.querySelector('.' + smallName + '-notes-container');
+    a = 1;
+    snapshot.forEach(doc => {
+        console.log(doc.data());
+        let docData = doc.data();
+        let classesObj = docData;
+        let date = [];
+        let notes = [];
+        date.push(classesObj.date);
+        notes.push(classesObj.classNotes);
+
+        let classDate = formatDate(date);
+
+        // Make accordion item outer
+        let accordionItem = document.createElement('DIV');
+        accordionItem.className = "accordion-item";
+
+        // Make accordion H2
+        let accordionH2 = document.createElement('H2');
+        accordionH2.className = "accordion-header";
+        accordionH2.setAttribute('id', `heading${a}`);
+
+        // Make accordion button
+        let accordionButton = document.createElement('BUTTON');
+        accordionButton.className = "accordion-button";
+        accordionButton.setAttribute('type', 'button');
+        accordionButton.setAttribute('data-bs-toggle', 'collapse');
+        accordionButton.setAttribute('data-bs-target', `#collapse${a}`);
+        accordionButton.setAttribute('aria-expanded', "true");
+        accordionButton.setAttribute('aria-controls', `collapse${a}`)
+        accordionButton.innerHTML = classDate;
+
+        // Append Selection elements together
+        accordionH2.appendChild(accordionButton);
+        accordionItem.appendChild(accordionH2);
+
+        // Make accordion collapse outer
+        let accordionCollapse = document.createElement('DIV');
+        accordionCollapse.setAttribute('id', `collapse${a}`);
+        accordionCollapse.className = "accordion-collapse collapse";
+        accordionCollapse.setAttribute('aria-labelledby', `heading${a}`);
+        accordionCollapse.setAttribute('data-bs-parent', `${smallName}-accordion`);
+
+        // Make accordion body
+        let accordionBody = document.createElement('DIV');
+        accordionBody.className = "accordion-body";
+
+        // Make P tag to hold notes
+        let pTag = document.createElement('P');
+        pTag.innerHTML = notes[0];
+
+        // Append Body Elements together
+        accordionBody.appendChild(pTag);
+        accordionCollapse.appendChild(accordionBody);
+
+        // Append to Accordion Parent Div
+        accordion.appendChild(accordionItem);
+        accordion.appendChild(accordionCollapse);
+        
+        // Append to body
+        studentTabsBody.appendChild(accordion);
+
+        a++;
+
+        // const tabName = document.querySelector(`#${smallName}-home-tab`);
+        // const accordions = document.querySelectorAll('.accordion');
+        // const accordionName = document.querySelector(`#${smallName}-accordion`);
+        
+        
+
+        // tabName.addEventListener('click', (e) => {
+        //     target = e.target;
+
+        //     accordions.forEach(acc => {
+        //         acc.classList.add('d-none');
+        //     })
+            
+           
+        // })
+    })
+});
+
+
+
     let payment;
     // Payment card
     function getPayment(classes) {
@@ -192,7 +291,7 @@ function addStudentInfo(change) {
         </div>
         `
 
-        const parentDiv = document.querySelector('.' + smallName + "-payment-notes-container");
+        const parentDiv = document.querySelector('.' + smallName + "-payment-container");
         parentDiv.innerHTML += paymentTab;
     }
 
@@ -212,7 +311,7 @@ function addStudentInfo(change) {
     // Create student info on tab
     studentInfo = `
     <div data-id="${change.doc.id}" class="tab-pane fade row" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
-        <div class="col-lg-12 col-md-12 col-sm-12 row student-profile bg-info m-0">
+        <div class="col-lg-6 col-md-6 col-sm-6 row student-profile bg-info m-0">
             <div class="student-info col-md-6 col-sm-6">
                 <h2>${j.name}</h2>
                 Birthday: ${birthday}<br>
@@ -244,7 +343,9 @@ function addStudentInfo(change) {
                 <img id="${smallName}-photo" src="${studentPhoto}" width="100%" alt="Student Photo">
             </div>
         </div>
-        <div class="row ${smallName}-payment-notes-container col-lg-12 col-md-12 col-sm-12">
+        <div class="col-lg-4 col-md-4 col-sm-4 row ${smallName}-notes-container m-0">
+        </div>
+        <div class="row ${smallName}-payment-container col-lg-12 col-md-12 col-sm-12">
         </div>
         
     </div>
@@ -258,102 +359,6 @@ function addStudentInfo(change) {
 
 
     console.log(studentCollection);
-    
-    // Get individual classes
-
-    let accordion = document.createElement('DIV');
-    accordion.className = `accordion col-lg-12 col-md-12 col-sm-12`;
-    accordion.setAttribute('id', `${smallName}-accordion`);
-    
-    let h2 = document.createElement('H3');
-    h2.className = 'text-center text-success';
-    h2.innerHTML = 'Class History';
-    accordion.appendChild(h2);
-
-    let docRef = db.collection("test-students").doc(change.doc.id).collection(newdate + ' classes');
-
-    docRef.get().then((snapshot) => {
-        const studentTabsBody = document.querySelector('.' + smallName + '-payment-notes-container');
-        a = 1;
-        snapshot.forEach(doc => {
-            console.log(doc.data());
-            let docData = doc.data();
-            let classesObj = docData;
-            let date = [];
-            let notes = [];
-            date.push(classesObj.date);
-            notes.push(classesObj.classNotes);
-
-            let classDate = formatDate(date);
-
-            // Make accordion item outer
-            let accordionItem = document.createElement('DIV');
-            accordionItem.className = "accordion-item";
-
-            // Make accordion H2
-            let accordionH2 = document.createElement('H2');
-            accordionH2.className = "accordion-header";
-            accordionH2.setAttribute('id', `heading${a}`);
-
-            // Make accordion button
-            let accordionButton = document.createElement('BUTTON');
-            accordionButton.className = "accordion-button";
-            accordionButton.setAttribute('type', 'button');
-            accordionButton.setAttribute('data-bs-toggle', 'collapse');
-            accordionButton.setAttribute('data-bs-target', `#collapse${a}`);
-            accordionButton.setAttribute('aria-expanded', "true");
-            accordionButton.setAttribute('aria-controls', `collapse${a}`)
-            accordionButton.innerHTML = classDate;
-
-            // Append Selection elements together
-            accordionH2.appendChild(accordionButton);
-            accordionItem.appendChild(accordionH2);
-
-            // Make accordion collapse outer
-            let accordionCollapse = document.createElement('DIV');
-            accordionCollapse.setAttribute('id', `collapse${a}`);
-            accordionCollapse.className = "accordion-collapse collapse";
-            accordionCollapse.setAttribute('aria-labelledby', `heading${a}`);
-            accordionCollapse.setAttribute('data-bs-parent', `${smallName}-accordion`);
-
-            // Make accordion body
-            let accordionBody = document.createElement('DIV');
-            accordionBody.className = "accordion-body";
-
-            // Make P tag to hold notes
-            let pTag = document.createElement('P');
-            pTag.innerHTML = notes[0];
-
-            // Append Body Elements together
-            accordionBody.appendChild(pTag);
-            accordionCollapse.appendChild(accordionBody);
-
-            // Append to Accordion Parent Div
-            accordion.appendChild(accordionItem);
-            accordion.appendChild(accordionCollapse);
-            
-            // Append to body
-            studentTabsBody.appendChild(accordion);
-
-            a++;
-
-            // const tabName = document.querySelector(`#${smallName}-home-tab`);
-            // const accordions = document.querySelectorAll('.accordion');
-            // const accordionName = document.querySelector(`#${smallName}-accordion`);
-            
-            
-
-            // tabName.addEventListener('click', (e) => {
-            //     target = e.target;
-
-            //     accordions.forEach(acc => {
-            //         acc.classList.add('d-none');
-            //     })
-                
-               
-            // })
-        })
-    });
 
 
 }
