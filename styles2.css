@@ -15,7 +15,7 @@ body, html {
   border: 1px solid rgba(255, 193, 7, .9);
   background-color: #ffc107;
   border-radius: 8px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0s,0,0,0.23);
 }
 
 .accordion-button {

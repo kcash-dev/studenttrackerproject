@@ -18,6 +18,7 @@ const uploadPhoto = document.querySelector('.add-student-photo');
 
 
 
+
 function Student(name, birthday, nationality, numClasses, classLength, studentNotes, studentPhotoURL, studentVideoURL, paidMonth) {
     this.name = name,
     this.birthday = birthday,
@@ -110,10 +111,158 @@ function addStudentInfo(change) {
     let deleteStudentSelect = '';
 
     
+    
+
+    // Populate Photo form with students
+
+    photoUploadInfo = `<option value="${change.doc.id}" data-id="${change.doc.id}">${j.name}</option>`;
+    studentPhotoSelect.innerHTML += photoUploadInfo;
+
+    // Populate delete form with students
+
+    deleteStudentSelect = `<option value="${change.doc.id}" data-id="${change.doc.id}">${j.name}</option>`;
+    studentDeleteSelect.innerHTML += deleteStudentSelect;
+
+
+    // Create student option in select for new class tab
+    newStudentInfo = `<option value="${change.doc.id}" data-id="${change.doc.id}">${j.name}</option>`;
+    studentSelect.innerHTML += newStudentInfo;
+
+
+    // Create student tab
+    studentTab = `
+    <li class="nav-item" role="presentation" data-id="${change.doc.id}">
+        <a class="nav-link student-tab" id="${smallName}-home-tab" data-bs-toggle="tab" href="#${smallName}" role="tab" aria-controls="home" aria-selected="true">${j.name}</a>
+    </li>
+    `
+    myTab.innerHTML += studentTab;
+
+    let payment;
+    // Payment card
+    function getPayment(classes) {
+        const monthTotalDiv = document.querySelector('.month-total');
+        let paymentTab = '';
+        let rate = 26;
+        let hours = (classes * j.classLength) / 60;
+        let monthTotal = hours * rate;
+
+        // Check Payment Status
+        let paymentVerification = undefined;
+        if (payment == true) {
+            paymentVerification = 'bg-success'
+        } else {
+            paymentVerification = 'bg-danger'
+        }
+
+        let output = 0;
+        const timer = setInterval(() => {
+            monthTotalDiv.innerHTML = `$${output}`;
+            if(output === monthTotal) {
+                clearInterval(timer);
+            } else {
+                output++;
+            }
+        }, 10);
+        
+
+        paymentTab = `
+        <div class="col-lg-12 col-md-12 col-sm-12 payment-container">
+            <div class="card ${paymentVerification} ${smallName}-payment-card" data-id="${change.doc.id}">
+                <div class="card-body text-center">
+                    <h1 class="text-center paymentH1">${month} Payment</h1>
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">Total Classes</th>
+                            <th scope="col">Rate</th>
+                            <th scope="col">Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">${classes}</th>
+                            <td>$${rate}</td>
+                            <td class="month-total"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" id="${smallName}-verify-payment-button" onclick="callTwoFuncs(this.id)" class="btn btn-success verify-button" data-id="${change.doc.id}"><i class="fas fa-check"></i></button>
+                </div>
+            </div>
+        </div>
+        `
+
+        const parentDiv = document.querySelector('.' + smallName + "-payment-notes-container");
+        parentDiv.innerHTML += paymentTab;
+    }
+
+    // get numClasses of month
+
+    let monthNumClasses = 0;
+    db.collection('test-students').doc(change.doc.id).collection(`${newdate} classes`).get().then((snapshot) => {
+        snapshot.forEach(doc => {
+            monthNumClasses++;
+        })
+        getPayment(monthNumClasses);
+    })
+
+    
+
+
+    // Create student info on tab
+    studentInfo = `
+    <div data-id="${change.doc.id}" class="tab-pane fade row" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
+        <div class="col-lg-12 col-md-12 col-sm-12 row student-profile bg-info m-0">
+            <div class="student-info col-md-6 col-sm-6">
+                <h2>${j.name}</h2>
+                Birthday: ${birthday}<br>
+                Nationality: ${j.nationality}<br>
+                Number of Classes: ${j.numClasses} classes<br>
+                Class Length: ${j.classLength} minutes<br>
+                <div class="student-profile-buttons-all">
+                    <button class="btn btn-warning student-profile-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentNotes" id="student-notes-collapse-button" aria-expanded="false" aria-controls="collapseStudentNotes">
+                        <i class="far fa-clipboard"></i>
+                    </button>
+                    <button class="btn btn-danger student-profile-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentVideo" id="student-video-collapse-button" aria-expanded="false" aria-controls="collapseStudentVideo">
+                        <i class="fab fa-youtube"></i>
+                    </button>
+                </div>
+                <div class="collapse" id="collapseStudentNotes">
+                    <div class="card card-body student-notes-card-body">
+                        <h4 class="text-success">Previous Class Notes</h4>
+                        <p>${j.studentNotes}</p>
+                    </div>
+                </div>
+                <div class="collapse" id="collapseStudentVideo">
+                    <div class="card card-body student-video-body">
+                        <h4 class="text-success">Previous Class Video Replay</h4>
+                        ${j.studentVideoURL}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 student-profile-photo">
+                <img id="${smallName}-photo" src="${studentPhoto}" width="100%" alt="Student Photo">
+            </div>
+        </div>
+        <div class="row ${smallName}-payment-notes-container col-lg-12 col-md-12 col-sm-12">
+        </div>
+        
+    </div>
+    `;
+    
+
+    myTabContent.innerHTML += studentInfo;
+    
+    i++;
+
+
+
+    console.log(studentCollection);
+    
     // Get individual classes
 
     let accordion = document.createElement('DIV');
-    accordion.className = `accordion col-md-4 col-sm-4 d-none`;
+    accordion.className = `accordion col-lg-12 col-md-12 col-sm-12`;
     accordion.setAttribute('id', `${smallName}-accordion`);
     
     let h2 = document.createElement('H3');
@@ -124,6 +273,7 @@ function addStudentInfo(change) {
     let docRef = db.collection("test-students").doc(change.doc.id).collection(newdate + ' classes');
 
     docRef.get().then((snapshot) => {
+        const studentTabsBody = document.querySelector('.' + smallName + '-payment-notes-container');
         a = 1;
         snapshot.forEach(doc => {
             console.log(doc.data());
@@ -183,162 +333,27 @@ function addStudentInfo(change) {
             accordion.appendChild(accordionCollapse);
             
             // Append to body
-            bodyDiv.appendChild(accordion);
+            studentTabsBody.appendChild(accordion);
 
             a++;
 
-            const tabName = document.querySelector(`#${smallName}-home-tab`);
-            const accordions = document.querySelectorAll('.accordion');
-            const accordionName = document.querySelector(`#${smallName}-accordion`);
+            // const tabName = document.querySelector(`#${smallName}-home-tab`);
+            // const accordions = document.querySelectorAll('.accordion');
+            // const accordionName = document.querySelector(`#${smallName}-accordion`);
             
-            tabName.addEventListener('click', () => {
-                accordions.forEach(acc => {
-                    if (acc.id === accordionName.id){
-                        console.log(accordionName);
-                        acc.classList.remove('d-none');
-                    } else {
-                        acc.classList.add('d-none');
-                    }
-                })
-            })
+            
+
+            // tabName.addEventListener('click', (e) => {
+            //     target = e.target;
+
+            //     accordions.forEach(acc => {
+            //         acc.classList.add('d-none');
+            //     })
+                
+               
+            // })
         })
     });
-
-    // Populate Photo form with students
-
-    photoUploadInfo = `<option value="${change.doc.id}" data-id="${change.doc.id}">${j.name}</option>`;
-    studentPhotoSelect.innerHTML += photoUploadInfo;
-
-    // Populate delete form with students
-
-    deleteStudentSelect = `<option value="${change.doc.id}" data-id="${change.doc.id}">${j.name}</option>`;
-    studentDeleteSelect.innerHTML += deleteStudentSelect;
-
-
-    // Create student option in select for new class tab
-    newStudentInfo = `<option value="${change.doc.id}" data-id="${change.doc.id}">${j.name}</option>`;
-    studentSelect.innerHTML += newStudentInfo;
-
-
-    // Create student tab
-    studentTab = `
-    <li class="nav-item" role="presentation" data-id="${change.doc.id}">
-        <a class="nav-link student-tab" id="${smallName}-home-tab" data-bs-toggle="tab" href="#${smallName}" role="tab" aria-controls="home" aria-selected="true">${j.name}</a>
-    </li>
-    `
-    myTab.innerHTML += studentTab;
-
-    // Payment card
-    function getPayment(classes, payment) {
-        let paymentTab = '';
-        let rate = 26;
-        let hours = (classes * j.classLength) / 60;
-        let monthTotal = hours * rate;
-
-        // Check Payment Status
-        let paymentVerification = undefined;
-        if (payment === true) {
-            paymentVerification = 'bg-success'
-        } else {
-            paymentVerification = 'bg-danger'
-        }
-        
-
-        paymentTab = `<div class="col-md-12 col-sm-12 payment-container">
-            <div class="card ${paymentVerification} ${smallName}-payment-card" data-id="${change.doc.id}">
-                <div class="card-body text-center">
-                    <h1 class="text-center paymentH1">${month} Payment</h1>
-                    <table class="table text-center">
-                        <thead>
-                        <tr>
-                            <th scope="col">Total Classes</th>
-                            <th scope="col">Rate</th>
-                            <th scope="col">Total</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">${classes}</th>
-                            <td>$${rate}</td>
-                            <td class="month-total">$${monthTotal}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <button type="button" id="${smallName}-verify-payment-button" onclick="callTwoFuncs(this.id)" class="btn btn-success verify-button" data-id="${change.doc.id}"><i class="fas fa-check"></i></button>
-                </div>
-            </div>
-        </div>
-        `
-
-        const parentDiv = document.querySelector('#' + smallName);
-        parentDiv.innerHTML += paymentTab;
-    }
-
-    // get numClasses of month
-
-    let monthNumClasses = 0;
-    let payment;
-    db.collection('test-students').doc(change.doc.id).collection(`${newdate} classes`).get().then((snapshot) => {
-        snapshot.forEach(doc => {
-            monthNumClasses++;
-            payment = doc.data().paidMonth;
-            
-        })
-        getPayment(monthNumClasses, payment);
-    })
-
-    
-
-
-    // Create student info on tab
-    studentInfo = `
-    <div data-id="${change.doc.id}" class="tab-pane fade row" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
-        <div class="col-md-12 col-sm-12 row student-profile bg-info m-0">
-            <div class="student-info col-md-6 col-sm-6">
-                <h2>${j.name}</h2>
-                Birthday: ${birthday}<br>
-                Nationality: ${j.nationality}<br>
-                Number of Classes: ${j.numClasses} classes<br>
-                Class Length: ${j.classLength} minutes<br>
-                <div class="student-profile-buttons-all">
-                    <button class="btn btn-warning student-profile-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentNotes" id="student-notes-collapse-button" aria-expanded="false" aria-controls="collapseStudentNotes">
-                        <i class="far fa-clipboard"></i>
-                    </button>
-                    <button class="btn btn-danger student-profile-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentVideo" id="student-video-collapse-button" aria-expanded="false" aria-controls="collapseStudentVideo">
-                        <i class="fab fa-youtube"></i>
-                    </button>
-                </div>
-                <div class="collapse" id="collapseStudentNotes">
-                    <div class="card card-body student-notes-card-body">
-                        <h4 class="text-success">Previous Class Notes</h4>
-                        <p>${j.studentNotes}</p>
-                    </div>
-                </div>
-                <div class="collapse" id="collapseStudentVideo">
-                    <div class="card card-body student-video-body">
-                        <h4 class="text-success">Previous Class Video Replay</h4>
-                        ${j.studentVideoURL}
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6 student-profile-photo">
-                <img id="${smallName}-photo" src="${studentPhoto}" width="100%" alt="Student Photo">
-            </div>
-        </div>
-        
-    </div>
-    `;
-    
-
-    myTabContent.innerHTML += studentInfo;
-    
-    i++;
-
-
-
-    console.log(studentCollection);
-    
-    
 
 
 }

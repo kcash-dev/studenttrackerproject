@@ -1,0 +1,19 @@
+{
+  "name": "studenttracker",
+  "version": "1.0.0",
+  "description": "A web app for teachers to track students, payment, etc.",
+  "main": "app.js",
+  "scripts": {
+    "compile:sass": "node-sass sass/main.scss css/styles.css -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kcash-dev/studenttrackerproject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kcash-dev/studenttrackerproject/issues"
+  },
+  "homepage": "https://github.com/kcash-dev/studenttrackerproject#readme"
+}
