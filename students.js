@@ -141,18 +141,18 @@ function addStudentInfo(change) {
 // Get individual classes
 
 let accordion = document.createElement('DIV');
-accordion.className = `accordion col-lg-12 col-md-12 col-sm-12`;
+accordion.className = `accordion col-lg-4 col-md-4 col-sm-4`;
 accordion.setAttribute('id', `${smallName}-accordion`);
 
-let h2 = document.createElement('H3');
-h2.className = 'text-center text-success';
-h2.innerHTML = 'Class History';
-accordion.appendChild(h2);
+// let h2 = document.createElement('H3');
+// h2.className = 'text-center text-success';
+// h2.innerHTML = 'Class History';
+// accordion.appendChild(h2);
 
 let docRef = db.collection("test-students").doc(change.doc.id).collection(newdate + ' classes');
 
 docRef.get().then((snapshot) => {
-    const studentTabsBody = document.querySelector('.' + smallName + '-notes-container');
+    const studentTabsBody = document.querySelector('.' + smallName + '-student-profile');
     a = 1;
     snapshot.forEach(doc => {
         console.log(doc.data());
@@ -215,22 +215,6 @@ docRef.get().then((snapshot) => {
         studentTabsBody.appendChild(accordion);
 
         a++;
-
-        // const tabName = document.querySelector(`#${smallName}-home-tab`);
-        // const accordions = document.querySelectorAll('.accordion');
-        // const accordionName = document.querySelector(`#${smallName}-accordion`);
-        
-        
-
-        // tabName.addEventListener('click', (e) => {
-        //     target = e.target;
-
-        //     accordions.forEach(acc => {
-        //         acc.classList.add('d-none');
-        //     })
-            
-           
-        // })
     })
 });
 
@@ -239,7 +223,7 @@ docRef.get().then((snapshot) => {
     let payment;
     // Payment card
     function getPayment(classes) {
-        const monthTotalDiv = document.querySelector('.month-total');
+        
         let paymentTab = '';
         let rate = 26;
         let hours = (classes * j.classLength) / 60;
@@ -253,15 +237,7 @@ docRef.get().then((snapshot) => {
             paymentVerification = 'bg-danger'
         }
 
-        let output = 0;
-        const timer = setInterval(() => {
-            monthTotalDiv.innerHTML = `$${output}`;
-            if(output === monthTotal) {
-                clearInterval(timer);
-            } else {
-                output++;
-            }
-        }, 10);
+        
         
 
         paymentTab = `
@@ -281,7 +257,7 @@ docRef.get().then((snapshot) => {
                         <tr>
                             <th scope="row">${classes}</th>
                             <td>$${rate}</td>
-                            <td class="month-total"></td>
+                            <td class="${smallName}-month-total"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -293,6 +269,22 @@ docRef.get().then((snapshot) => {
 
         const parentDiv = document.querySelector('.' + smallName + "-payment-container");
         parentDiv.innerHTML += paymentTab;
+
+        const tabName = document.querySelector(`#${smallName}-home-tab`);
+
+        const monthTotalDiv = document.querySelector('.' + smallName + '-month-total');
+        tabName.addEventListener('click', () => {
+            let output = 0;
+            const timer = setInterval(() => {
+            monthTotalDiv.textContent = `$${output}`;
+            if(output === monthTotal) {
+                clearInterval(timer);
+            } else {
+                output+= .5;
+            }
+            }, 5);
+
+        })
     }
 
     // get numClasses of month
@@ -310,18 +302,21 @@ docRef.get().then((snapshot) => {
 
     // Create student info on tab
     studentInfo = `
-    <div data-id="${change.doc.id}" class="tab-pane fade row" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
-        <div class="col-lg-6 col-md-6 col-sm-6 row student-profile bg-info m-0">
-            <div class="student-info col-md-6 col-sm-6">
-                <h2>${j.name}</h2>
-                Birthday: ${birthday}<br>
-                Nationality: ${j.nationality}<br>
-                Number of Classes: ${j.numClasses} classes<br>
-                Class Length: ${j.classLength} minutes<br>
+    <div data-id="${change.doc.id}" class="tab-pane fade row container col-lg-12 col-md-12 col-sm-12" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
+        <div class="col-lg-12 col-md-12 col-sm-12 row ${smallName}-student-profile">
+            <div class="student-info col-lg-8 col-md-8 col-sm-8 row bg-info">
+                <div class="col-lg-6 col-md-6 col-sm-6 student-info-text">
+                    <h2 class="student-info-text-h2">${j.name}</h2>
+                    Birthday: ${birthday}<br>
+                    Nationality: ${j.nationality}<br>
+                    Number of Classes: ${j.numClasses} classes<br>
+                    Class Length: ${j.classLength} minutes<br>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 student-profile-photo">
+                    <img id="${smallName}-photo" src="${studentPhoto}" width="100%" alt="Student Photo">
+                </div>
                 <div class="student-profile-buttons-all">
-                    <button class="btn btn-warning student-profile-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentNotes" id="student-notes-collapse-button" aria-expanded="false" aria-controls="collapseStudentNotes">
-                        <i class="far fa-clipboard"></i>
-                    </button>
                     <button class="btn btn-danger student-profile-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentVideo" id="student-video-collapse-button" aria-expanded="false" aria-controls="collapseStudentVideo">
                         <i class="fab fa-youtube"></i>
                     </button>
@@ -339,11 +334,6 @@ docRef.get().then((snapshot) => {
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-6 student-profile-photo">
-                <img id="${smallName}-photo" src="${studentPhoto}" width="100%" alt="Student Photo">
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-4 row ${smallName}-notes-container m-0">
         </div>
         <div class="row ${smallName}-payment-container col-lg-12 col-md-12 col-sm-12">
         </div>
