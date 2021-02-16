@@ -240,7 +240,7 @@ docRef.get().then((snapshot) => {
         <div class="col-12 payment-container">
             <div class="card ${paymentVerification} ${smallName}-payment-card box" data-id="${change.doc.id}">
                 <div class="card-body text-center">
-                    <h2 class="text-center paymentH2">${month} Payment</h2>
+                    <h2 class="text-center paymentH2 p-5">${month} Payment</h2>
                     <table class="table text-center">
                         <thead>
                         <tr>
@@ -299,23 +299,28 @@ docRef.get().then((snapshot) => {
                 <button class="nav-link" id="${smallName}-contact-tab" data-bs-toggle="tab" data-bs-target="#${smallName}-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
             </li>
         </ul>
-        <div class="tab-content container" id="${smallName}-perf-content">
-            <div class="tab-pane fade row col-12 clearfix" id="${smallName}-performance" role="tabpanel" aria-labelledby="performance-tab">
-                <div class="col-4 student-class-performance">
-                    <h3>Previous Class Performance</h3>
-                    <ul>
-                        <li>Speaking</li>
-                        <li>Listening</li>
-                        <li>Reading</li>
-                        <li>Grammar</li>
-                    </ul>
-                </div>
-                <div class="col-8 student-class-performance-graph">
-                    <img src="/images/example-graph.png">
+        <div class="tab-content" id="${smallName}-perf-content">
+            <div class="tab-pane container" id="${smallName}-performance" role="tabpanel" aria-labelledby="performance-tab">
+            <h3>Previous Class Performance</h3>
+            <div class="row align-items-center">
+                    <div class="col-4 student-performance-class m-0">
+                        <ul class="student-performance-class-ul p-0">
+                            <li>Speaking</li>
+                            <li>Listening</li>
+                            <li>Reading</li>
+                            <li>Grammar</li>
+                        </ul>
+                    </div>
+                    <div class="col-8 student-performance-graph-class m-0">
+                        <img src="/images/example-graph.png">
+                    </div>
                 </div>
             </div>
-            <div class="tab-pane fade performance-box" id="${smallName}-video" role="tabpanel" aria-labelledby="video-tab">${j.studentVideoURL}</div>
-            <div class="tab-pane fade" id="${smallName}-contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+            <div class="tab-pane performance-box" id="${smallName}-video" role="tabpanel" aria-labelledby="video-tab">
+            <h3>Previous Class Replay</h3>
+            ${j.studentVideoURL}
+            </div>
+            <div class="tab-pane" id="${smallName}-contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
         </div>
         `
     
@@ -363,7 +368,7 @@ docRef.get().then((snapshot) => {
         </div>
 
         <div class="col-12 box row container ${smallName}-perf-container performance-box">
-          <h2 class="student-perf-h2">Student Performance</h2>
+          <h2 class="student-perf-h2 p-5">Student Performance</h2>
         </div>
         
     </div>

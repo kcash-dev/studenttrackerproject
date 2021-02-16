@@ -14,6 +14,12 @@ h2 {
   .student-tab:focus {
     color: #dc3546; }
 
+.p-0 {
+  padding: 0; }
+
+.p-5 {
+  padding: 5px; }
+
 .accordion {
   margin-left: .5rem;
   margin-top: 1.3rem; }
@@ -81,5 +87,10 @@ body, html {
 .student-info-text {
   margin-top: 2rem; }
 
-.student-class-performance-graph img {
+.student-performance-class-graph img {
   width: 80%; }
+
+.student-performance-class-ul {
+  font-size: 2rem;
+  list-style-type: none;
+  text-align: left; }

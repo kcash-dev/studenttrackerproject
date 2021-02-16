@@ -13,6 +13,15 @@ body, html {
   }
 }
 
-.student-class-performance-graph img {
-  width: 80%;
+.student-performance-class {
+  &-graph img {
+    width: 80%;
+  }
+
+  &-ul {
+    font-size: 2rem;
+    list-style-type: none;
+    text-align: left;
+  }
 }
+
