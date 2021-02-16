@@ -1,9 +1,9 @@
 
 const popup = document.querySelector('.popup-wrapper');
-const payment = document.getElementsByClassName('.payment-container');
 const verifyButton = document.querySelector('.verify-button');
 const cancelButton = document.querySelector('.cancel-button');
 const accordion = document.querySelector('.accordion');
+const studentTabs = document.querySelector('.student-tabs');
 
 
 
@@ -26,6 +26,13 @@ document.querySelector('#upload-image-button').addEventListener('click', () => {
 
     if (newStudent.classList.contains('d-none') === false) {
         newStudent.classList.add('d-none');
+    }
+    
+    if (studentTabs.classList.contains('col-lg-12')) {
+        studentTabs.className = 'col-8 student-tabs';
+    } else if (newStudent.classList.contains('d-none') && newClass.classList.contains('d-none') 
+    && deleteStudent.classList.contains('d-none') && uploadPhoto.classList.contains('d-none')) {
+        studentTabs.className = 'col-12 student-tabs';
     }
 })
 
@@ -51,6 +58,13 @@ document.querySelector('#add-student-button').addEventListener('click', () => {
     if (uploadPhoto.classList.contains('d-none') === false) {
         uploadPhoto.classList.add('d-none');
     }
+
+    if (studentTabs.classList.contains('col-lg-12')) {
+        studentTabs.className = 'col-8 student-tabs';
+    } else if (newStudent.classList.contains('d-none') && newClass.classList.contains('d-none') 
+    && deleteStudent.classList.contains('d-none') && uploadPhoto.classList.contains('d-none')) {
+        studentTabs.className = 'col-12 student-tabs';
+    }
 });
 
 
@@ -74,6 +88,13 @@ document.querySelector('#add-class-button').addEventListener('click', () => {
     if (uploadPhoto.classList.contains('d-none') === false) {
         uploadPhoto.classList.add('d-none');
     }
+
+    if (studentTabs.classList.contains('col-lg-12')) {
+        studentTabs.className = 'col-8 student-tabs';
+    } else if (newStudent.classList.contains('d-none') && newClass.classList.contains('d-none') 
+    && deleteStudent.classList.contains('d-none') && uploadPhoto.classList.contains('d-none')) {
+        studentTabs.className = 'col-12 student-tabs';
+    }
 });
 
 // Show 'Delete Student' input
@@ -95,6 +116,13 @@ document.querySelector('#delete-student-button').addEventListener('click', () =>
 
     if (uploadPhoto.classList.contains('d-none') === false) {
         uploadPhoto.classList.add('d-none');
+    }
+
+    if (studentTabs.classList.contains('col-lg-12')) {
+        studentTabs.className = 'col-8 student-tabs';
+    } else if (newStudent.classList.contains('d-none') && newClass.classList.contains('d-none') 
+    && deleteStudent.classList.contains('d-none') && uploadPhoto.classList.contains('d-none')) {
+        studentTabs.className = 'col-12 student-tabs';
     }
 })
 
@@ -139,5 +167,13 @@ cancelButton.addEventListener('click', (e) => {
     e.preventDefault();
     popup.classList.add('d-none');
 })
+
+
+// Change size of student tabs
+
+if (newStudent.classList.contains('d-none') && newClass.classList.contains('d-none') 
+&& deleteStudent.classList.contains('d-none') && uploadPhoto.classList.contains('d-none')) {
+    studentTabs.className = 'col-12 student-tabs';
+}
 
 

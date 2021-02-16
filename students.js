@@ -141,7 +141,7 @@ function addStudentInfo(change) {
 // Get individual classes
 
 let accordion = document.createElement('DIV');
-accordion.className = `accordion col-lg-4 col-md-4 col-sm-4`;
+accordion.className = `accordion col-4`;
 accordion.setAttribute('id', `${smallName}-accordion`);
 
 // let h2 = document.createElement('H3');
@@ -155,7 +155,6 @@ docRef.get().then((snapshot) => {
     const studentTabsBody = document.querySelector('.' + smallName + '-student-profile');
     a = 1;
     snapshot.forEach(doc => {
-        console.log(doc.data());
         let docData = doc.data();
         let classesObj = docData;
         let date = [];
@@ -218,7 +217,7 @@ docRef.get().then((snapshot) => {
     })
 });
 
-
+// PAYMENT INFO
 
     let payment;
     // Payment card
@@ -237,14 +236,11 @@ docRef.get().then((snapshot) => {
             paymentVerification = 'bg-danger'
         }
 
-        
-        
-
         paymentTab = `
-        <div class="col-lg-12 col-md-12 col-sm-12 payment-container">
-            <div class="card ${paymentVerification} ${smallName}-payment-card" data-id="${change.doc.id}">
+        <div class="col-12 payment-container">
+            <div class="card ${paymentVerification} ${smallName}-payment-card box" data-id="${change.doc.id}">
                 <div class="card-body text-center">
-                    <h1 class="text-center paymentH1">${month} Payment</h1>
+                    <h2 class="text-center paymentH2">${month} Payment</h2>
                     <table class="table text-center">
                         <thead>
                         <tr>
@@ -261,7 +257,7 @@ docRef.get().then((snapshot) => {
                         </tr>
                         </tbody>
                     </table>
-                    <button type="button" id="${smallName}-verify-payment-button" onclick="callTwoFuncs(this.id)" class="btn btn-success verify-button" data-id="${change.doc.id}"><i class="fas fa-check"></i></button>
+                    <button type="button" id="${smallName}-verify-payment-button" onclick="callTwoFuncs(this.id)" class="all-btn btn-success verify-button" data-id="${change.doc.id}"><i class="fas fa-check"></i></button>
                 </div>
             </div>
         </div>
@@ -287,6 +283,47 @@ docRef.get().then((snapshot) => {
         })
     }
 
+     // STUDENT PERFORMANCE
+    function studentPerformance() {
+        let studentPerf = '';
+    
+        studentPerf = `
+        <ul class="nav nav-tabs" id="${smallName}-perf-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="${smallName}-performance-tab" data-bs-toggle="tab" data-bs-target="#${smallName}-performance" type="button" role="tab" aria-controls="performance" aria-selected="true">Performance</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="${smallName}-video-tab" data-bs-toggle="tab" data-bs-target="#${smallName}-video" type="button" role="tab" aria-controls="video" aria-selected="false">Class Replay</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="${smallName}-contact-tab" data-bs-toggle="tab" data-bs-target="#${smallName}-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+            </li>
+        </ul>
+        <div class="tab-content container" id="${smallName}-perf-content">
+            <div class="tab-pane fade row col-12 clearfix" id="${smallName}-performance" role="tabpanel" aria-labelledby="performance-tab">
+                <div class="col-4 student-class-performance">
+                    <h3>Previous Class Performance</h3>
+                    <ul>
+                        <li>Speaking</li>
+                        <li>Listening</li>
+                        <li>Reading</li>
+                        <li>Grammar</li>
+                    </ul>
+                </div>
+                <div class="col-8 student-class-performance-graph">
+                    <img src="/images/example-graph.png">
+                </div>
+            </div>
+            <div class="tab-pane fade performance-box" id="${smallName}-video" role="tabpanel" aria-labelledby="video-tab">${j.studentVideoURL}</div>
+            <div class="tab-pane fade" id="${smallName}-contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+        </div>
+        `
+    
+        const studentPerfContainer = document.querySelector('.' + smallName + '-perf-container');
+        studentPerfContainer.innerHTML += studentPerf;
+    
+        }
+
     // get numClasses of month
 
     let monthNumClasses = 0;
@@ -295,47 +332,38 @@ docRef.get().then((snapshot) => {
             monthNumClasses++;
         })
         getPayment(monthNumClasses);
+        studentPerformance();
     })
 
+   
     
 
-
+    function createStudent() {
     // Create student info on tab
     studentInfo = `
-    <div data-id="${change.doc.id}" class="tab-pane fade row container col-lg-12 col-md-12 col-sm-12" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
-        <div class="col-lg-12 col-md-12 col-sm-12 row ${smallName}-student-profile">
-            <div class="student-info col-lg-8 col-md-8 col-sm-8 row bg-info">
-                <div class="col-lg-6 col-md-6 col-sm-6 student-info-text">
+    <div data-id="${change.doc.id}" class="tab-pane fade row container col-12" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
+        <div class="col-12 row ${smallName}-student-profile student">
+            
+            <div class="student-info box col-8 row bg-info">
+                <div class="col-6 student-info-text">
                     <h2 class="student-info-text-h2">${j.name}</h2>
                     Birthday: ${birthday}<br>
                     Nationality: ${j.nationality}<br>
                     Number of Classes: ${j.numClasses} classes<br>
                     Class Length: ${j.classLength} minutes<br>
                 </div>
-
-                <div class="col-lg-6 col-md-6 col-sm-6 student-profile-photo">
+                <div class="col-6 student-profile-photo">
                     <img id="${smallName}-photo" src="${studentPhoto}" width="100%" alt="Student Photo">
                 </div>
-                <div class="student-profile-buttons-all">
-                    <button class="btn btn-danger student-profile-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStudentVideo" id="student-video-collapse-button" aria-expanded="false" aria-controls="collapseStudentVideo">
-                        <i class="fab fa-youtube"></i>
-                    </button>
-                </div>
-                <div class="collapse" id="collapseStudentNotes">
-                    <div class="card card-body student-notes-card-body">
-                        <h4 class="text-success">Previous Class Notes</h4>
-                        <p>${j.studentNotes}</p>
-                    </div>
-                </div>
-                <div class="collapse" id="collapseStudentVideo">
-                    <div class="card card-body student-video-body">
-                        <h4 class="text-success">Previous Class Video Replay</h4>
-                        ${j.studentVideoURL}
-                    </div>
-                </div>
             </div>
+
         </div>
-        <div class="row ${smallName}-payment-container col-lg-12 col-md-12 col-sm-12">
+
+        <div class="row ${smallName}-payment-container col-12">
+        </div>
+
+        <div class="col-12 box row container ${smallName}-perf-container performance-box">
+          <h2 class="student-perf-h2">Student Performance</h2>
         </div>
         
     </div>
@@ -345,13 +373,10 @@ docRef.get().then((snapshot) => {
     myTabContent.innerHTML += studentInfo;
     
     i++;
-
-
-
-    console.log(studentCollection);
-
-
 }
+    createStudent();
+}
+
 // Real-time Listener
 db.collection('test-students').orderBy('name').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();

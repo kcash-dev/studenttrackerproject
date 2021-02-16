@@ -5,21 +5,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    
-
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Acme&display=swap" rel="stylesheet"> 
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <link rel="stylesheet" href="/styles2.css">
-    <link rel="stylesheet" href="/css/styles.css">
     
     <script src="https://kit.fontawesome.com/9c8fd68b30.js" crossorigin="anonymous"></script>
 
     <!-- FAB -->
     <link rel="stylesheet" href="css/button.css">
     <link rel="stylesheet" href="/css/floating-action-button.css">
+
+    <!-- Own CSS-->
+
+    <link rel="stylesheet" href="/styles2.css">
+    <link rel="stylesheet" href="/css/styles.css">
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
@@ -56,7 +57,7 @@
         </div>
 
         <!--Upload Student Photo Form-->
-        <div class="col-md-4 col-sm-4 add-student-photo text-center d-none">
+        <div class="col-4 add-student-photo text-center d-none">
           <h2>Upload Student Profile Photo</h2>
           <form id="add-student-photo-form">
             <div class="mb-3">
@@ -68,19 +69,19 @@
             <div class="mb-3">
               <p><label for="photo">Upload Image</label></p>
               <p><input type="file" accept="image/*" name="fileupload" value="fileupload" id="photo"></p>
-              <button class="btn btn-secondary btn-success" id="upload-button" onclick="uploadImage()"><i class="fas fa-arrow-circle-up"></i></button>
+              <button class="all-btn btn-success" id="upload-button" onclick="uploadImage()"><i class="fas fa-arrow-circle-up"></i></button>
             </div>
-            <h2>Upload Student Profile Photo</h2>
+            <h2>Upload Previous Class Replay</h2>
             <div class="mb-3">
               <p><label for="video">Upload Video</label></p>
               <p><input type="text" accept="text" name="videoupload" placeholder="<iframe>...</iframe>" value="" id="video"></p>
-              <button class="btn btn-secondary btn-success" id="video-upload-button"><i class="fas fa-arrow-circle-up"></i></button>
+              <button class="all-btn btn-success" id="video-upload-button"><i class="fas fa-arrow-circle-up"></i></button>
             </div>
           </form>
         </div>
 
         <!--Add New Class Form-->
-        <div class="col-md-4 col-sm-4 add-new-class text-center d-none">
+        <div class="col-4 add-new-class text-center d-none">
           <h2>Add New Class</h2>
           <form id="add-new-class-form">
             <div class="mb-3">
@@ -97,12 +98,12 @@
               <label for="class-notes" class="form-label">Class Notes</label>
               <textarea class="form-control" id="class-notes" rows="3"></textarea>
             </div>
-            <button type="button" id="add-new-class-button" class="btn btn-info"><i class="fas fa-plus"></i></button>
+            <button type="button" id="add-new-class-button" class="all-btn btn-info"><i class="fas fa-plus"></i></button>
           </form>
         </div>
 
         <!--Add New Student Form-->
-        <div class="col-md-4 col-sm-4 add-new-student text-center d-none">
+        <div class="col-4 add-new-student text-center d-none">
           <h2>Add New Student</h2>
           <form id="add-new-student-form">
             <div class="mb-3">
@@ -131,12 +132,12 @@
                 <label for="new-student-notes" class="form-label">Student Notes</label>
                 <textarea class="form-control" id="new-student-notes" name="newStudentNotes" rows="3"></textarea>
             </div>
-            <button id="add-new-student-button" class="btn btn-warning"><i class="fas fa-plus"></i></button>
+            <button id="add-new-student-button" class="all-btn btn-warning"><i class="fas fa-plus"></i></button>
           </form>
         </div>
 
         <!--Delete Student Form-->
-        <div class="col-md-4 col-sm-4 delete-student text-center d-none">
+        <div class="col-4 delete-student text-center d-none">
           <h2>Delete Student</h2>
           <form id="delete-student-form">
             <div class="mb-3">
@@ -145,17 +146,17 @@
                 <option selected>Select student</option>
               </select>
             </div>
-            <button id="delete-student-form-button" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+            <button id="delete-student-form-button" class="all-btn btn-danger"><i class="fas fa-trash-alt"></i></button>
           </form>
         </div>
 
         <!--Student Tabs-->
-        <div class="col-lg-8 col-md-8 col-sm-8 student-tabs">
-          <div class="col-md-12 col-sm-12 student-tabs-body">
+        <div class="col-8 student-tabs">
+          <div class="col-12 student-tabs-body">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
               
             </ul>
-            <div class="tab-content text-center col-lg-12 col-md-12 col-sm-12" id="myTabContent">
+            <div class="tab-content text-center col-12" id="myTabContent">
               
             </div>
           </div>
@@ -168,8 +169,8 @@
                       <div class="card-body">
                           <h5 class="card-title">Verify Payment?</h5>
                           <p class="card-text">Are you sure you would like to verify that this student has paid?</p>
-                          <button type="button" class="btn btn-success verify-button"><i class="fas fa-check"></i></button>
-                          <button type="button" class="btn btn-secondary cancel-button"><i class="fas fa-times"></i></button>
+                          <button type="button" class="all-btn btn-success verify-button"><i class="fas fa-check"></i></button>
+                          <button type="button" class="all-btn btn-secondary cancel-button"><i class="fas fa-times"></i></button>
                       </div>
                   </div>
               </div>
@@ -193,3 +194,4 @@
     
   </body>
 </html>
+

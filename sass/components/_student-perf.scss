@@ -1,0 +1,9 @@
+.performance-box {
+    background-color: $primary-green;
+
+    & iframe {
+        width: 100%;
+        height: 60rem;
+        border-radius: 8px;
+    }
+}
