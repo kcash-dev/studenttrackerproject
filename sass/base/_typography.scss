@@ -1,9 +1,17 @@
-h2 {
+.accordion-button {
     font-size: 2rem;
 }
 
+h2 {
+    font-size: 3.5rem;
+}
+
+h3 {
+    font-size: 2.2rem;
+    margin-bottom: .5rem;
+}
+
 .student-info {
-    font-size: 1.5rem;
     color: white;
     text-align: left;
 }
@@ -13,7 +21,6 @@ h2 {
 }
 
 .student-tab {
-    font-size: 1.5rem;
 
     &:focus {
         color: $primary-red;

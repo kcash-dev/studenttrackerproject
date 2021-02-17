@@ -1,12 +1,15 @@
 .all-btn {
-    width: 3em;
-	height: 3em;
+    width: 6rem;
+	height: 6rem;
     color: white;
-    box-shadow: 0 10px 20px rgba($color-black,0.19), 0 6px 6px rgba($color-black,0.23);
-    border-radius: 100px;
+    box-shadow: 0 1rem 2rem rgba($color-black,0.19), 0 6px 6px rgba($color-black,0.23);
+    border-radius: 10rem;
     border: none;
     outline: none;
     transition: all .2s;
+    display: inline-block;
+    margin: 1rem auto;
+    font-size: 2rem;
 
     &:hover {
         transform: translateY(-4px);

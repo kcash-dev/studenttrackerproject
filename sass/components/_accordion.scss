@@ -1,6 +1,5 @@
 .accordion {
-  margin-left: .5rem;
-  margin-top: 1.3rem;
+  
     &-body {
         border: 1px solid rgba(255, 193, 7, .9);
         background-color: #ffc107;
@@ -9,7 +8,7 @@
       }
 
     &-button {
-    border-radius: 8px;
+    border-radius: .8rem;
     background-color: #ffc107;
     border: 1px solid #0d6efd;
     color: black;
@@ -17,8 +16,8 @@
 
       &:not(.collapsed) {
         background-color: #ffc107;
-      color: black;
-      box-shadow: 0 1rem 2rem rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+        color: black;
+        box-shadow: 0 1rem 2rem rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
       }
     }
   }

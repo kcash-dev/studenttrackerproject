@@ -11,23 +11,10 @@
   margin-top: 20px;
 }
 
-.payment-container {
-    margin-top: 100px;
-    color: white;
-}
-
 .body-div {
   position: relative;
 }
 
-.card-body {
-    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-    font-size: 1.3rem;
-}
-
-.card-body button {
-  margin: auto 20px;
-}
 
 .container-fluid {
   height:100%;
@@ -105,69 +92,6 @@ footer {
   bottom: 5%;
   right: -95%;
 }
-
-
-.payment-card:hover {
-  cursor: pointer;
-}
-
-.payment-container {
-  margin-bottom: 50px;
-}
-
-.popup a {
-    text-decoration: none;
-    padding: 6px 10px;
-}
-
-.popup-card {
-  position: absolute;
-  margin-left: auto;
-  margin-right: auto;
-  top: 300px;
-  left: 0;
-  right: 0;
-  text-align: center;
-}
-
-.popup-close {
-    position: absolute;
-    top: 5px;
-    right: 8px;
-    cursor: pointer;
-}
-
-.popup-wrapper {
-    background: rgba(0, 0, 0, .5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 90;
-}
-
-.student-profile-buttons-all {
-  margin: 10px auto;
-  text-align: left;
-}
-
-.student-profile-button:nth-child(2) {
-  margin-left: 10px;
-}
-
-.student-profile-photo img {
-  border-radius: 8px;
-  margin: 20px auto;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-}
-
-#collapseStudentVideo {
-  width: 680px;
-  height: 520px;
-}
-
-
 
 .tab-pane {
   margin-top: 20px;

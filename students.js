@@ -141,7 +141,7 @@ function addStudentInfo(change) {
 // Get individual classes
 
 let accordion = document.createElement('DIV');
-accordion.className = `accordion col-4`;
+accordion.className = `accordion col-4 ml1 mt2`;
 accordion.setAttribute('id', `${smallName}-accordion`);
 
 // let h2 = document.createElement('H3');
@@ -238,8 +238,8 @@ docRef.get().then((snapshot) => {
 
         paymentTab = `
         <div class="col-12 payment-container">
-            <div class="card ${paymentVerification} ${smallName}-payment-card box" data-id="${change.doc.id}">
-                <div class="card-body text-center">
+            <div class="${paymentVerification} ${smallName}-payment-card box" data-id="${change.doc.id}">
+                <div class="text-center">
                     <h2 class="text-center paymentH2 p-5">${month} Payment</h2>
                     <table class="table text-center">
                         <thead>
@@ -290,28 +290,28 @@ docRef.get().then((snapshot) => {
         studentPerf = `
         <ul class="nav nav-tabs" id="${smallName}-perf-tab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="${smallName}-performance-tab" data-bs-toggle="tab" data-bs-target="#${smallName}-performance" type="button" role="tab" aria-controls="performance" aria-selected="true">Performance</button>
+                <button class="nav-link student-performance-tab" id="${smallName}-performance-tab" data-bs-toggle="tab" data-bs-target="#${smallName}-performance" type="button" role="tab" aria-controls="performance" aria-selected="true">Performance</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="${smallName}-video-tab" data-bs-toggle="tab" data-bs-target="#${smallName}-video" type="button" role="tab" aria-controls="video" aria-selected="false">Class Replay</button>
+                <button class="nav-link student-performance-tab" id="${smallName}-video-tab" data-bs-toggle="tab" data-bs-target="#${smallName}-video" type="button" role="tab" aria-controls="video" aria-selected="false">Class Replay</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="${smallName}-contact-tab" data-bs-toggle="tab" data-bs-target="#${smallName}-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+                <button class="nav-link student-performance-tab" id="${smallName}-contact-tab" data-bs-toggle="tab" data-bs-target="#${smallName}-contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
             </li>
         </ul>
         <div class="tab-content" id="${smallName}-perf-content">
             <div class="tab-pane container" id="${smallName}-performance" role="tabpanel" aria-labelledby="performance-tab">
             <h3>Previous Class Performance</h3>
             <div class="row align-items-center">
-                    <div class="col-4 student-performance-class m-0">
-                        <ul class="student-performance-class-ul p-0">
+                    <div class="col-4 student-performance-class m0">
+                        <ul class="student-performance-class-ul p0">
                             <li>Speaking</li>
                             <li>Listening</li>
                             <li>Reading</li>
                             <li>Grammar</li>
                         </ul>
                     </div>
-                    <div class="col-8 student-performance-graph-class m-0">
+                    <div class="col-8 student-performance-class-graph m-0">
                         <img src="/images/example-graph.png">
                     </div>
                 </div>
