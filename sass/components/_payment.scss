@@ -1,5 +1,12 @@
-.payment-container {
-    margin-top: 10rem;
-    margin-bottom: 5rem;
-    color: white;
+.payment{
+
+    &-container {
+        margin-top: 10rem;
+        margin-bottom: 5rem;
+        color: white;
+    }
+
+    &-table {
+        color: white;
+    }
 }

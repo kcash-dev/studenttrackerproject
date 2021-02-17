@@ -1,4 +1,9 @@
 .popup {
+    text-align: center;
+    width: 100%;
+    max-width: 300px;
+    margin: 2% 30%;
+    z-index: 95;
 
     & a {
         text-decoration: none;

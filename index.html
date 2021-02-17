@@ -33,7 +33,7 @@
     <div class="container-fluid">
       <nav class="navbar bg-info">
         <a class="navbar-brand">
-          <img src="images/logo.png" alt="Logo" id="logo" width="30%">
+          <img src="images/logo.png" alt="Logo" class="ml2" id="logo" width="30%">
         </a>
       </nav>
       <div class="row body-div">
@@ -58,8 +58,8 @@
 
         <!--Upload Student Photo Form-->
         <div class="col-4 add-student-photo text-center d-none">
-          <h2>Upload Student Profile Photo</h2>
-          <form id="add-student-photo-form">
+          <h2 class="mt2">Upload Student Profile Photo</h2>
+          <form id="add-student-photo-form" class="mt2">
             <div class="mb-3">
               <label for="student-photo-select">Student Name</label>
               <select class="form-select" id="student-photo-select" aria-label="Select Student">
@@ -71,7 +71,7 @@
               <p><input type="file" accept="image/*" name="fileupload" value="fileupload" id="photo"></p>
               <button class="all-btn btn-success" id="upload-button" onclick="uploadImage()"><i class="fas fa-arrow-circle-up"></i></button>
             </div>
-            <h2>Upload Previous Class Replay</h2>
+            <h2 class="mt2">Upload Previous Class Replay</h2>
             <div class="mb-3">
               <p><label for="video">Upload Video</label></p>
               <p><input type="text" accept="text" name="videoupload" placeholder="<iframe>...</iframe>" value="" id="video"></p>
@@ -82,8 +82,8 @@
 
         <!--Add New Class Form-->
         <div class="col-4 add-new-class text-center d-none">
-          <h2>Add New Class</h2>
-          <form id="add-new-class-form">
+          <h2 class="mt2">Add New Class</h2>
+          <form id="add-new-class-form" class="mt2">
             <div class="mb-3">
               <label for="student-select">Student Name</label>
               <select class="form-select" id="student-select" aria-label="Select Student" required>
@@ -104,8 +104,8 @@
 
         <!--Add New Student Form-->
         <div class="col-4 add-new-student text-center d-none">
-          <h2>Add New Student</h2>
-          <form id="add-new-student-form">
+          <h2 class="mt2">Add New Student</h2>
+          <form id="add-new-student-form" class="mt2">
             <div class="mb-3">
               <label for="new-student-name" class="form-label">Student Name</label>
               <input type="text" class="form-control" name="name" id="new-student-name" required>
@@ -138,8 +138,8 @@
 
         <!--Delete Student Form-->
         <div class="col-4 delete-student text-center d-none">
-          <h2>Delete Student</h2>
-          <form id="delete-student-form">
+          <h2 class="mt2">Delete Student</h2>
+          <form id="delete-student-form" class="mt2">
             <div class="mb-3">
               <label for="student-delete-select">Select Student</label>
               <select class="form-select" id="student-delete-select" name="studentDelete" aria-label="Select student to delete" required> 

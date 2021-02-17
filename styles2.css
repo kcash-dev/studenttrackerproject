@@ -1,85 +1,13 @@
 
-.add-student-photo form, .add-new-class form, .add-new-student form, .delete-student form {
-  margin-left: 20px;
-}
-
-.add-student-photo-form h2 {
-  margin-top: 20px;
-}
-
-.add-student-photo h2, .add-new-class h2, .add-new-student h2, .delete-student h2 {
-  margin-top: 20px;
-}
 
 .body-div {
   position: relative;
 }
 
-
 .container-fluid {
   height:100%;
   position: relative;
   padding: 0;
-}
-
-
-
-@font-face {
-    font-family: 'icomoon';
-    src:  url('fonts/icomoon.eot?1rh1d5');
-    src:  url('fonts/icomoon.eot?1rh1d5#iefix') format('embedded-opentype'),
-      url('fonts/icomoon.ttf?1rh1d5') format('truetype'),
-      url('fonts/icomoon.woff?1rh1d5') format('woff'),
-      url('fonts/icomoon.svg?1rh1d5#icomoon') format('svg');
-    font-weight: normal;
-    font-style: normal;
-    font-display: block;
-  }
-  
-  [class^="icon-"], [class*=" icon-"] {
-    /* use !important to prevent issues with browser extensions that change fonts */
-    font-family: 'icomoon' !important;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-  
-    /* Better Font Rendering =========== */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-i {
-  font-size: 1.4rem;
-}
-  
-.icon-student:before {
-    content: "\e901";
-  }
-.icon-class:before {
-    content: "\e900";
-  }
-
-
-
-.popup {
-    text-align: center;
-    width: 100%;
-    max-width: 300px;
-    margin: 2% 30%;
-    z-index: 95;
-}
-
-footer {
-  position: absolute;
-   bottom:0;
-   width:100%;
-   height:60px;
-}
-
-#logo {
-  margin-left: 20px;
 }
 
 #myTabContent {
@@ -91,15 +19,6 @@ footer {
   position: absolute;
   bottom: 5%;
   right: -95%;
-}
-
-.tab-pane {
-  margin-top: 20px;
-}
-
-
-.table {
-  color: white;
 }
 
 /** Extra Small (575px and below) **/

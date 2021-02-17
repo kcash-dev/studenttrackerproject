@@ -241,7 +241,7 @@ docRef.get().then((snapshot) => {
             <div class="${paymentVerification} ${smallName}-payment-card box" data-id="${change.doc.id}">
                 <div class="text-center">
                     <h2 class="text-center paymentH2 p-5">${month} Payment</h2>
-                    <table class="table text-center">
+                    <table class="table text-center payment-table">
                         <thead>
                         <tr>
                             <th scope="col">Total Classes</th>
@@ -300,7 +300,7 @@ docRef.get().then((snapshot) => {
             </li>
         </ul>
         <div class="tab-content" id="${smallName}-perf-content">
-            <div class="tab-pane container" id="${smallName}-performance" role="tabpanel" aria-labelledby="performance-tab">
+            <div class="tab-pane mt2 container" id="${smallName}-performance" role="tabpanel" aria-labelledby="performance-tab">
             <h3>Previous Class Performance</h3>
             <div class="row align-items-center">
                     <div class="col-4 student-performance-class m0">
@@ -316,11 +316,11 @@ docRef.get().then((snapshot) => {
                     </div>
                 </div>
             </div>
-            <div class="tab-pane performance-box" id="${smallName}-video" role="tabpanel" aria-labelledby="video-tab">
+            <div class="tab-pane mt2 performance-box" id="${smallName}-video" role="tabpanel" aria-labelledby="video-tab">
             <h3>Previous Class Replay</h3>
             ${j.studentVideoURL}
             </div>
-            <div class="tab-pane" id="${smallName}-contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+            <div class="tab-pane mt2" id="${smallName}-contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
         </div>
         `
     
@@ -346,7 +346,7 @@ docRef.get().then((snapshot) => {
     function createStudent() {
     // Create student info on tab
     studentInfo = `
-    <div data-id="${change.doc.id}" class="tab-pane fade row container col-12" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
+    <div data-id="${change.doc.id}" class="tab-pane mt2 fade row container col-12" id="${smallName}" role="tabpanel" aria-labelledby="${smallName}-tab">
         <div class="col-12 row ${smallName}-student-profile student">
             
             <div class="student-info box col-8 row bg-info">
