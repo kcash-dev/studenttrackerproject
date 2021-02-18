@@ -28,7 +28,7 @@ document.querySelector('#upload-image-button').addEventListener('click', () => {
         newStudent.classList.add('d-none');
     }
     
-    if (studentTabs.classList.contains('col-lg-12')) {
+    if (studentTabs.classList.contains('col-12')) {
         studentTabs.className = 'col-8 student-tabs';
     } else if (newStudent.classList.contains('d-none') && newClass.classList.contains('d-none') 
     && deleteStudent.classList.contains('d-none') && uploadPhoto.classList.contains('d-none')) {
@@ -59,7 +59,7 @@ document.querySelector('#add-student-button').addEventListener('click', () => {
         uploadPhoto.classList.add('d-none');
     }
 
-    if (studentTabs.classList.contains('col-lg-12')) {
+    if (studentTabs.classList.contains('col-12')) {
         studentTabs.className = 'col-8 student-tabs';
     } else if (newStudent.classList.contains('d-none') && newClass.classList.contains('d-none') 
     && deleteStudent.classList.contains('d-none') && uploadPhoto.classList.contains('d-none')) {
@@ -89,7 +89,7 @@ document.querySelector('#add-class-button').addEventListener('click', () => {
         uploadPhoto.classList.add('d-none');
     }
 
-    if (studentTabs.classList.contains('col-lg-12')) {
+    if (studentTabs.classList.contains('col-12')) {
         studentTabs.className = 'col-8 student-tabs';
     } else if (newStudent.classList.contains('d-none') && newClass.classList.contains('d-none') 
     && deleteStudent.classList.contains('d-none') && uploadPhoto.classList.contains('d-none')) {
@@ -118,7 +118,7 @@ document.querySelector('#delete-student-button').addEventListener('click', () =>
         uploadPhoto.classList.add('d-none');
     }
 
-    if (studentTabs.classList.contains('col-lg-12')) {
+    if (studentTabs.classList.contains('col-12')) {
         studentTabs.className = 'col-8 student-tabs';
     } else if (newStudent.classList.contains('d-none') && newClass.classList.contains('d-none') 
     && deleteStudent.classList.contains('d-none') && uploadPhoto.classList.contains('d-none')) {
@@ -168,12 +168,5 @@ cancelButton.addEventListener('click', (e) => {
     popup.classList.add('d-none');
 })
 
-
-// Change size of student tabs
-
-if (newStudent.classList.contains('d-none') && newClass.classList.contains('d-none') 
-&& deleteStudent.classList.contains('d-none') && uploadPhoto.classList.contains('d-none')) {
-    studentTabs.className = 'col-12 student-tabs';
-}
 
 

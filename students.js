@@ -238,7 +238,7 @@ docRef.get().then((snapshot) => {
 
         paymentTab = `
         <div class="col-12 payment-container">
-            <div class="${paymentVerification} ${smallName}-payment-card box" data-id="${change.doc.id}">
+            <div class="${paymentVerification} ${smallName}-payment-card box " data-id="${change.doc.id}">
                 <div class="text-center">
                     <h2 class="text-center paymentH2 p-5">${month} Payment</h2>
                     <table class="table text-center payment-table">
